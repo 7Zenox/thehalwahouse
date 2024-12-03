@@ -1,0 +1,72 @@
+{
+    "moong_dal_halwa": {
+        "name": "Moong Dal Halwa",
+        "small": ["250 gms", 350],
+        "medium": ["500 gms", 650],
+        "large": ["1 kg", 1200],
+        "description": "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
+        "path": "src/app/assets/"
+    },
+
+    "suji_halwa": {
+        "name": "Suji Halwa",
+        "small": ["250 gms", 350],
+        "medium": ["500 gms", 650],
+        "large": ["1 kg", 1200],
+        "description": "Made from suji stirred in fresh ghee.",
+        "path": "src/app/assets/"
+    },
+
+    "kesar_halwa": {
+        "name": "Kesar Halwa",
+        "small": ["250 gms", 350],
+        "medium": ["500 gms", 650],
+        "large": ["1 kg", 1200],
+        "description": "Fragrant saffron and ghee blend into this royal indulgence of Suji.",
+        "path": "src/app/assets/"
+    },
+
+    "aata_halwa": {
+        "name": "Aata Halwa",
+        "small": ["250 gms", 350],
+        "medium": ["500 gms", 650],
+        "large": ["1 kg", 1200],
+        "description": "Comforting aata halwa soaked in ghee and roasted to perfection.",
+        "path": "src/app/assets/"
+    },
+
+    // "gajar_halwa": {
+    //     "name": "Gajar Halwa",
+    //     "small": ["250 gms", 350],
+    //     "medium": ["500 gms", 650],
+    //     "large": ["1 kg", 1200],
+    //     "description": "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
+    //     "path": "src/app/assets/"
+    // },
+
+    "badam_halwa": {
+        "name": "Badam Halwa",
+        "small": ["250 gms", 450],
+        "medium": ["500 gms", 850],
+        "large": ["1 kg", 1600],
+        "description": "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
+        "path": "src/app/assets/"
+    },
+
+    "oreo_halwa": {
+        "name": "Oreo Halwa",
+        "small": ["250 gms", 375],
+        "medium": ["500 gms", 700],
+        "large": ["1 kg", 1300],
+        "description": "A fusion delight with crunchy Oreo bits in a soft, creamy yet flaky base.",
+        "path": "src/app/assets/"
+    },
+
+    "dry_fruits_mix": {
+        "name": "Dry Fruits Mix",
+        "small": ["150 gms", 300],
+        "medium": ["250 gms", 550],
+        "description": "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
+        "path": "src/app/assets/"
+    }
+}

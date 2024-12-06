@@ -35,14 +35,14 @@
         "path": "src/app/assets/"
     },
 
-    // "gajar_halwa": {
-    //     "name": "Gajar Halwa",
-    //     "small": ["250 gms", 350],
-    //     "medium": ["500 gms", 650],
-    //     "large": ["1 kg", 1200],
-    //     "description": "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
-    //     "path": "src/app/assets/"
-    // },
+    "gajar_halwa": {
+        "name": "Gajar Halwa",
+        "small": ["250 gms", 350],
+        "medium": ["500 gms", 650],
+        "large": ["1 kg", 1200],
+        "description": "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
+        "path": "src/app/assets/"
+    },
 
     "badam_halwa": {
         "name": "Badam Halwa",

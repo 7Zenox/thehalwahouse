@@ -36,45 +36,45 @@ export default function HalwaPage() {
       {/* Navbar */}
       <div className="flex items-center justify-between px-4 py-6">
         <div>
-          <h1 className="text-xl font-bold">thehalwahouse</h1>
-          <p className="text-sm">EXOTIC HOMEMADE HALWAS</p>
+          <h1 className="text-5xl font-bold font-anton">thehalwahouse</h1>
+          <p className="text-xs font-luloClean">EXOTIC HOMEMADE HALWAS</p>
         </div>
       </div>
 
       {/* Content Section */}
       <div className="container mx-auto px-4 py-8">
-        <div className="hidden md:grid md:grid-cols-2 border-2">
+        <div className="hidden md:grid md:grid-cols-2">
           {/* First Column */}
-          <div className="border-2">
-            <div className="mb-6 border-2">
-              <h2 className="text-2xl font-semibold mb-4 uppercase">{halwa.name}</h2>
-              <p className="text-sm mb-6">{halwa.description}</p>
+          <div className="">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold mb-4 uppercase font-luloClean">{halwa.name}</h2>
+              <p className="text-sm mb-6 font-afacad">{halwa.description}</p>
             </div>
-            <div className="flex justify-start gap-8 text-center border-2">
+            <div className="flex justify-around gap-8 text-center">
               {halwa.small && (
-                <div className="border-2">
-                  <p className="font-bold">{halwa.small[0]}</p>
-                  <p>Rs. {halwa.small[1]}</p>
+                <div className="">
+                  <p className="font-bold font-luloCleanBold">{halwa.small[0]}</p>
+                  <p className="font-luloClean">Rs. {halwa.small[1]}</p>
                 </div>
               )}
               {halwa.medium && (
-                <div className="border-2">
-                  <p className="font-bold">{halwa.medium[0]}</p>
-                  <p>Rs. {halwa.medium[1]}</p>
+                <div className="">
+                  <p className="font-bold font-luloCleanBold">{halwa.medium[0]}</p>
+                  <p className="font-luloClean">Rs. {halwa.medium[1]}</p>
                 </div>
               )}
               {halwa.large && (
-                <div className="border-2">
-                  <p className="font-bold">{halwa.large[0]}</p>
-                  <p>Rs. {halwa.large[1]}</p>
+                <div className="">
+                  <p className="font-bold font-luloCleanBold">{halwa.large[0]}</p>
+                  <p className="font-luloClean">Rs. {halwa.large[1]}</p>
                 </div>
               )}
             </div>
           </div>
 
           {/* Second Column */}
-          <div className="flex flex-col items-center border-2">
-            <div className="relative w-64 h-64 mb-6 border-2 border-gold rounded-md flex items-center justify-center">
+          <div className="flex flex-col items-center ">
+            <div className="relative w-64 h-64 mb-6  border-gold rounded-md flex items-center justify-center">
               {/* Uncomment and replace `src` when images are available */}
               {/* <Image
                 src={halwa.path}
@@ -89,7 +89,7 @@ export default function HalwaPage() {
             </div>
 
             {/* Pagination */}
-            <div className="flex gap-4 justify-center border-2">
+            <div className="flex justify-center font-afacad">
               {halwaKeys.map((key) => (
                 <button
                   key={key}
@@ -108,13 +108,13 @@ export default function HalwaPage() {
         </div>
 
         {/* Mobile Layout */}
-        <div className="grid md:hidden gap-4 border-2">
-          <div className="border-2">
+        <div className="grid md:hidden gap-4 ">
+          <div className="">
             <h2 className="text-2xl font-semibold mb-2 uppercase">{halwa.name}</h2>
             <p className="text-sm mb-4">{halwa.description}</p>
           </div>
 
-          <div className="relative w-full h-64 border-2 border-gold rounded-md flex items-center justify-center">
+          <div className="relative w-full h-64  border-gold rounded-md flex items-center justify-center">
             {/* Uncomment and replace `src` when images are available */}
             {/* <Image
               src={halwa.path}
@@ -128,36 +128,36 @@ export default function HalwaPage() {
             </div>
           </div>
 
-          <div className="flex justify-start gap-8 text-center border-2">
+          <div className="flex justify-start gap-8 text-center ">
             {halwa.small && (
-              <div className="border-2">
+              <div className="">
                 <p className="font-bold">{halwa.small[0]}</p>
                 <p>Rs. {halwa.small[1]}</p>
               </div>
             )}
             {halwa.medium && (
-              <div className="border-2">
+              <div className="">
                 <p className="font-bold">{halwa.medium[0]}</p>
                 <p>Rs. {halwa.medium[1]}</p>
               </div>
             )}
             {halwa.large && (
-              <div className="border-2">
+              <div className="">
                 <p className="font-bold">{halwa.large[0]}</p>
                 <p>Rs. {halwa.large[1]}</p>
               </div>
             )}
           </div>
 
-          <div className="flex gap-4 justify-center border-2">
+          <div className="flex gap-4 justify-center ">
             {halwaKeys.map((key) => (
               <button
                 key={key}
                 onClick={() => handlePaginationClick(key)}
-                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                className={`px-4 py-2 rounded-md font-afacad text-sm transition-colors ${
                   key === currentHalwa
-                    ? "bg-gold text-black"
-                    : "bg-transparent text-gold hover:bg-gold hover:text-black"
+                    ? "bg-gold text-yellow-700 "
+                    : "bg-transparent text-gold hover:bg-gold hover:text-yellow-700"
                 }`}
               >
                 {halwaData[key].name}

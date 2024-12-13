@@ -8,6 +8,13 @@ export default {
   ],
   theme: {
     extend: {
+
+      fontFamily: {
+        "afacad": "var(--font-afacad)",
+        "anton": "var(--font-anton)",
+        "luloClean": "var(--font-luloClean)",
+        "luloCleanBold": "var(--font-luloCleanBold)"
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

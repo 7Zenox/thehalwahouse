@@ -1,6 +1,7 @@
 export type WeightOption = {
     weight: string;
     price: number;
+    serves: string;
   };
   
   export interface Halwa {

@@ -1,72 +1,66 @@
 {
     "moong_dal_halwa": {
-        "name": "Moong Dal",
-        "small": ["250 gms", 350],
-        "medium": ["500 gms", 650],
-        "large": ["1 kg", 1200],
-        "description": "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
-        "path": "src/app/assets/"
+      "name": "Moong Dal",
+      "small": { "weight": "250 gms", "price": 350, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 650, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1200, "serves": "6-8" },
+      "description": "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
+      "path": "/assets/Moong Dal.JPG"
     },
-
     "suji_halwa": {
-        "name": "Suji",
-        "small": ["250 gms", 350],
-        "medium": ["500 gms", 650],
-        "large": ["1 kg", 1200],
-        "description": "Made from suji stirred in fresh ghee.",
-        "path": "src/app/assets/"
+      "name": "Suji",
+      "small": { "weight": "250 gms", "price": 350, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 650, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1200, "serves": "6-8" },
+      "description": "Made from suji stirred in fresh ghee.",
+      "path": "/assets/Suji.JPG"
     },
-
     "kesar_halwa": {
-        "name": "Kesar",
-        "small": ["250 gms", 350],
-        "medium": ["500 gms", 650],
-        "large": ["1 kg", 1200],
-        "description": "Fragrant saffron and ghee blend into this royal indulgence of Suji.",
-        "path": "src/app/assets/"
+      "name": "Kesar",
+      "small": { "weight": "250 gms", "price": 350, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 650, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1200, "serves": "6-8" },
+      "description": "Fragrant saffron and ghee blend into this royal indulgence of Suji.",
+      "path": "/assets/Kesar.JPG"
     },
-
     "aata_halwa": {
-        "name": "Aata",
-        "small": ["250 gms", 350],
-        "medium": ["500 gms", 650],
-        "large": ["1 kg", 1200],
-        "description": "Comforting aata halwa soaked in ghee and roasted to perfection.",
-        "path": "src/app/assets/"
+      "name": "Aata",
+      "small": { "weight": "250 gms", "price": 350, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 650, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1200, "serves": "6-8" },
+      "description": "Comforting aata halwa soaked in ghee and roasted to perfection.",
+      "path": "/assets/Aata.JPG"
     },
-
     "gajar_halwa": {
-        "name": "Gajar",
-        "small": ["250 gms", 350],
-        "medium": ["500 gms", 650],
-        "large": ["1 kg", 1200],
-        "description": "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
-        "path": "src/app/assets/"
+      "name": "Gajar",
+      "small": { "weight": "250 gms", "price": 350, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 650, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1200, "serves": "6-8" },
+      "description": "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
+      "path": "/assets/Gajar.JPG"
     },
-
     "badam_halwa": {
-        "name": "Badam",
-        "small": ["250 gms", 450],
-        "medium": ["500 gms", 850],
-        "large": ["1 kg", 1600],
-        "description": "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
-        "path": "src/app/assets/"
+      "name": "Badam",
+      "small": { "weight": "250 gms", "price": 450, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 850, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1600, "serves": "6-8" },
+      "description": "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
+      "path": "/assets/Badam.JPG"
     },
-
     "oreo_halwa": {
-        "name": "Oreo",
-        "small": ["250 gms", 375],
-        "medium": ["500 gms", 700],
-        "large": ["1 kg", 1300],
-        "description": "A fusion delight with crunchy Oreo bits in a soft, creamy yet flaky base.",
-        "path": "src/app/assets/"
+      "name": "Oreo",
+      "small": { "weight": "250 gms", "price": 375, "serves": "2-3" },
+      "medium": { "weight": "500 gms", "price": 700, "serves": "4-5" },
+      "large": { "weight": "1 kg", "price": 1300, "serves": "6-8" },
+      "description": "A fusion delight with crunchy Oreo bits in a soft, creamy yet flaky base.",
+      "path": "/assets/Oreo.JPG"
     },
-
     "dry_fruits_mix": {
-        "name": "Dry Fruits Mix",
-        "small": ["150 gms", 300],
-        "medium": ["250 gms", 550],
-        "description": "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-        "path": "src/app/assets/"
+      "name": "Dry Fruits Mix",
+      "small": { "weight": "150 gms", "price": 300, "serves": "7-10 garnishings" },
+      "medium": { "weight": "250 gms", "price": 550, "serves": "15-20 garnishings" },
+      "description": "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
+      "path": "/assets/DryFruits.JPG"
     }
-}
+  }
+  

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { FaUtensilSpoon } from "react-icons/fa";
 import Image from "next/image";
 import { Halwa } from "./types";
 
@@ -35,7 +36,7 @@ export default function HalwaPage() {
         setIsNavbarVisible(true);
       }
 
-      const secondSectionOffset = document.querySelector(".main-section")?.offsetTop || 0;
+      const secondSectionOffset = (document.querySelector(".main-section") as HTMLElement)?.offsetTop || 0;
       setIsPaginationVisible(window.scrollY >= secondSectionOffset);
 
       lastScrollY = window.scrollY;
@@ -61,9 +62,8 @@ export default function HalwaPage() {
     <div className="min-h-screen bg-black text-[#ba9256]">
       {/* Navbar */}
       <div
-        className={`sticky top-0 z-10 backdrop-blur-lg bg-opacity-50 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${
-          isNavbarVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`sticky top-0 z-10 backdrop-blur-lg bg-opacity-50 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <h1 className="text-4xl font-anton">thehalwahouse</h1>
         <p className="text-sm font-luloClean">EXOTIC HOMEMADE HALWAS</p>
@@ -71,54 +71,87 @@ export default function HalwaPage() {
 
       {/* Hero Section */}
       <div className="relative h-screen">
-        {/* <Image
-          src="/path-to-your-hero-image.jpg"
-          alt="Hero Background"
+        <Image
+          src={"/assets/hero.JPG"} // Replace with the actual image path
+          alt={halwa.name}
           layout="fill"
           objectFit="cover"
-          className="absolute"
-        /> */}
+          className="rounded-3xl"
+        />
       </div>
 
       {/* Main Section */}
       <div className="container mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 main-section">
         {/* First Column: Name and Description */}
-        <div className="flex items-center justify-center border border-[#ba9256] p-6 rounded-t-full min-h-[90vh]">
+        <div className="flex items-center justify-center border-2 border-[#ba9256] p-6 rounded-t-full min-h-[90vh]">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold uppercase font-luloClean">{halwa.name}</h2>
-            <p className="text-sm mt-4 font-afacad">{halwa.description}</p>
+            <h2 className="text-xl uppercase font-luloClean">{halwa.name}</h2>
+            <p className="text-lg mt-4 font-afacad">{halwa.description}</p>
           </div>
         </div>
 
         {/* Second Column: Image */}
-        <div className="relative w-full h-full border border-[#ba9256] rounded-3xl min-h-[90vh] flex items-center justify-center">
-          {/* <Image
-            src={halwa.path} // Replace with the actual image path
+        <div className="relative w-full h-full rounded-3xl min-h-[90vh] flex items-center justify-center">
+          <Image
+            src={halwa.path || "assets/Aata.jpg"} // Replace with the actual image path
             alt={halwa.name}
             layout="fill"
             objectFit="cover"
-            className="rounded-md"
-          /> */}
+            className="rounded-3xl"
+          />
         </div>
 
-        {/* Third Column: Weight and Pricing */}
-        <div className="flex flex-col items-center justify-center border border-[#ba9256] p-6 rounded-full min-h-[90vh]">
+        {/* Third Column: Weight, Pricing, and Serves */}
+        <div className="flex flex-col items-center justify-center border-2 border-[#ba9256] p-6 rounded-full min-h-[90vh]">
           {halwa.small && (
-            <div className="mb-4 text-center">
-              <p className="font-bold font-luloCleanBold">{halwa.small.weight}</p>
-              <p className="font-luloClean">Rs. {halwa.small.price}</p>
+            <div className="flex flex-col items-center my-10">
+              {/* Row 1: Weight, Divider, and Price */}
+              <div className="flex items-center justify-center w-full px-10 gap-4">
+                <p className="font-bold font-luloCleanBold">{halwa.small.weight}</p>
+                <div className="h-6 w-[2px] bg-[#ba9256]" />
+                <p className="font-luloClean">Rs. {halwa.small.price}</p>
+              </div>
+
+              {/* Row 2: Serves */}
+              <div className="flex items-center justify-center gap-2 my-4">
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <p className="text-md font-afacad">Serves: {halwa.small.serves}</p>
+              </div>
             </div>
           )}
           {halwa.medium && (
-            <div className="mb-4 text-center">
-              <p className="font-bold font-luloCleanBold">{halwa.medium.weight}</p>
-              <p className="font-luloClean">Rs. {halwa.medium.price}</p>
+            <div className="flex flex-col items-center my-10">
+              {/* Row 1: Weight, Divider, and Price */}
+              <div className="flex items-center justify-center w-full px-10 gap-4">
+                <p className="font-bold font-luloCleanBold">{halwa.medium.weight}</p>
+                <div className="h-6 w-[2px] bg-[#ba9256]" />
+                <p className="font-luloClean">Rs. {halwa.medium.price}</p>
+              </div>
+
+              {/* Row 2: Serves */}
+              <div className="flex items-center justify-center gap-2 my-4">
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <p className="text-md font-afacad">Serves: {halwa.medium.serves}</p>
+              </div>
             </div>
           )}
           {halwa.large && (
-            <div className="text-center">
-              <p className="font-bold font-luloCleanBold">{halwa.large.weight}</p>
-              <p className="font-luloClean">Rs. {halwa.large.price}</p>
+            <div className="flex flex-col items-center my-10">
+              {/* Row 1: Weight, Divider, and Price */}
+              <div className="flex items-center justify-center w-full px-10 gap-4">
+                <p className="font-bold font-luloCleanBold">{halwa.large.weight}</p>
+                <div className="h-6 w-[2px] bg-[#ba9256]" />
+                <p className="font-luloClean">Rs. {halwa.large.price}</p>
+              </div>
+
+              {/* Row 2: Serves */}
+              <div className="flex items-center justify-center gap-2 my-4">
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <FaUtensilSpoon className="text-[#ba9256]" />
+                <p className="text-md font-afacad">Serves: {halwa.large.serves}</p>
+              </div>
             </div>
           )}
         </div>
@@ -126,19 +159,17 @@ export default function HalwaPage() {
 
       {/* Pagination */}
       <div
-        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-sm bg-white/5 px-6 py-4 rounded-full transition-opacity duration-300 flex justify-center space-x-4 ${
-          isPaginationVisible ? "opacity-100" : "opacity-0"
-        }`}
+        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-xl bg-black/30 px-6 py-4 rounded-full transition-opacity duration-300 flex justify-center space-x-4 ${isPaginationVisible ? "opacity-100" : "opacity-0"
+          }`}
       >
         {halwaKeys.map((key) => (
           <button
             key={key}
             onClick={() => handlePaginationClick(key)}
-            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${
-              key === currentHalwa
-                ? "bg-gold text-gray-300 underline-offset-4 underline"
-                : "bg-transparent text-gold hover:text-orange-200"
-            }`}
+            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${key === currentHalwa
+              ? "bg-gold text-gray-300 underline-offset-4 underline"
+              : "bg-transparent text-gold hover:text-orange-200"
+              }`}
           >
             {halwaData[key].name}
           </button>

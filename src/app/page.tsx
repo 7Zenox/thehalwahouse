@@ -62,7 +62,7 @@ export default function HalwaPage() {
     <div className="min-h-screen bg-black text-[#ba9256]">
       {/* Navbar */}
       <div
-        className={`sticky top-0 z-10 backdrop-blur-lg bg-opacity-50 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"
+        className={`sticky top-0 z-10 backdrop-blur-xl bg-black/30 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"
           }`}
       >
         <h1 className="text-4xl font-anton">thehalwahouse</h1>
@@ -70,14 +70,16 @@ export default function HalwaPage() {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-screen">
-        <Image
-          src={"/assets/hero.JPG"} // Replace with the actual image path
-          alt={halwa.name}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-3xl"
-        />
+      <div className="relative h-screen bg-black">
+        <div className="absolute top-0 w-full h-[70vh]">
+          <Image
+            src={"/assets/hero.JPG"} // Replace with the actual image path
+            alt={halwa.name}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-none"
+          />
+        </div>
       </div>
 
       {/* Main Section */}

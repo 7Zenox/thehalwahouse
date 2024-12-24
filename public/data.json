@@ -45,7 +45,7 @@
       "medium": { "weight": "500 gms", "price": 850, "serves": "4-5" },
       "large": { "weight": "1 kg", "price": 1600, "serves": "6-8" },
       "description": "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
-      "path": "/assets/Badam.JPG"
+      "path": "/assets/Badam.jpg"
     },
     "oreo_halwa": {
       "name": "Oreo",
@@ -60,7 +60,7 @@
       "small": { "weight": "150 gms", "price": 300, "serves": "7-10 garnishings" },
       "medium": { "weight": "250 gms", "price": 550, "serves": "15-20 garnishings" },
       "description": "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-      "path": "/assets/DryFruits.JPG"
+      "path": "/assets/Dry_Fruits_Mix.jpg"
     }
   }
   

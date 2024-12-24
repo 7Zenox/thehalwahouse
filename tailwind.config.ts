@@ -8,7 +8,6 @@ export default {
   ],
   theme: {
     extend: {
-
       fontFamily: {
         "afacad": "var(--font-afacad)",
         "anton": "var(--font-anton)",

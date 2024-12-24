@@ -1,6 +1,6 @@
 {
     "moong_dal_halwa": {
-        "name": "Moong Dal Halwa",
+        "name": "Moong Dal",
         "small": ["250 gms", 350],
         "medium": ["500 gms", 650],
         "large": ["1 kg", 1200],
@@ -9,7 +9,7 @@
     },
 
     "suji_halwa": {
-        "name": "Suji Halwa",
+        "name": "Suji",
         "small": ["250 gms", 350],
         "medium": ["500 gms", 650],
         "large": ["1 kg", 1200],
@@ -18,7 +18,7 @@
     },
 
     "kesar_halwa": {
-        "name": "Kesar Halwa",
+        "name": "Kesar",
         "small": ["250 gms", 350],
         "medium": ["500 gms", 650],
         "large": ["1 kg", 1200],
@@ -27,7 +27,7 @@
     },
 
     "aata_halwa": {
-        "name": "Aata Halwa",
+        "name": "Aata",
         "small": ["250 gms", 350],
         "medium": ["500 gms", 650],
         "large": ["1 kg", 1200],
@@ -36,7 +36,7 @@
     },
 
     "gajar_halwa": {
-        "name": "Gajar Halwa",
+        "name": "Gajar",
         "small": ["250 gms", 350],
         "medium": ["500 gms", 650],
         "large": ["1 kg", 1200],
@@ -45,7 +45,7 @@
     },
 
     "badam_halwa": {
-        "name": "Badam Halwa",
+        "name": "Badam",
         "small": ["250 gms", 450],
         "medium": ["500 gms", 850],
         "large": ["1 kg", 1600],
@@ -54,7 +54,7 @@
     },
 
     "oreo_halwa": {
-        "name": "Oreo Halwa",
+        "name": "Oreo",
         "small": ["250 gms", 375],
         "medium": ["500 gms", 700],
         "large": ["1 kg", 1300],

@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import BentoGrid from "@bentogrid/core";
 import HalwaMenu from "./components/HalwaMenu";
-import FeaturesGrid from "./components/FeaturesGrid";
+import FeaturesGrid from "./components/BentoFeatures";
 import { Halwa } from "./types";
 
 export default function HalwaPage() {
   const [halwaData, setHalwaData] = useState<Record<string, Halwa> | null>(null);
-  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -19,7 +18,7 @@ export default function HalwaPage() {
       setHalwaData(data);
 
       // Preload images
-      Object.values(data).forEach((halwa: Halwa) => {
+      (Object.values(data) as Halwa[]).forEach((halwa) => {
         const img = new window.Image();
         img.src = halwa.path;
       });
@@ -28,21 +27,14 @@ export default function HalwaPage() {
   }, []);
 
   useEffect(() => {
-    // BentoGrid Initialization
-    const bentogridElement = document.querySelector(".bentogrid");
-    if (bentogridElement) {
-      new BentoGrid({
-        target: ".bentogrid",
-        columns: 6,
-        cellGap: 50,
-        breakpoints: {
-          1024: { columns: 6, cellGap: 12 },
-          768: { columns: 4, cellGap: 6 },
-          480: { columns: 2, cellGap: 4 },
-        },
-      });
-    }
-  }, [halwaData]);
+    const handleScroll = () => {
+      // Show navbar as soon as the user starts scrolling
+      setIsNavbarVisible(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (!halwaData) return <p className="text-[#ba9256] text-center mt-10">Loading...</p>;
 
@@ -62,7 +54,7 @@ export default function HalwaPage() {
 
       {/* Navbar */}
       <div
-        className={`sticky top-0 z-10 backdrop-blur-xl bg-black/30 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${
+        className={`fixed top-0 left-0 w-full z-10 backdrop-blur-xl bg-black/30 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${
           isNavbarVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -71,13 +63,14 @@ export default function HalwaPage() {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-screen bg-black flex flex-col justify-end items-start">
+      <div className="relative h-screen bg-black">
         <div className="absolute top-0 w-full h-[70vh]">
           <Image
             src={"/assets/hero.JPG"}
             alt="Hero"
-            fill
-            className="rounded-none object-cover"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-none"
             priority
           />
         </div>

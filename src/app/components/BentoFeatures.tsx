@@ -1,10 +1,29 @@
 "use client";
 
+import { useEffect } from "react";
 import { PiCookingPotBold } from "react-icons/pi";
-import { FaBan, FaSeedling, FaGem, FaLeaf, FaHeart, FaGifts } from "react-icons/fa6";
+import { FaBan, FaSeedling, FaGem, FaLeaf, FaHeart, FaGifts, FaDroplet } from "react-icons/fa6";
 import { GiPaperBagFolded } from "react-icons/gi";
+import BentoGrid from "@bentogrid/core";
 
 export default function FeaturesGrid() {
+  useEffect(() => {
+    // Initialize BentoGrid
+    const bentogridElement = document.querySelector(".bentogrid");
+    if (bentogridElement) {
+      new BentoGrid({
+        target: ".bentogrid",
+        columns: 6,
+        cellGap: 50,
+        breakpoints: {
+          1024: { columns: 6, cellGap: 12 },
+          768: { columns: 4, cellGap: 6 },
+          480: { columns: 2, cellGap: 4 },
+        },
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-black py-12 flex items-center justify-center font-afacad">
       <div className="bentogrid w-full max-w-6xl px-4">
@@ -21,8 +40,8 @@ export default function FeaturesGrid() {
           <p>Made from Clean and Fresh Ingredients</p>
         </div>
         <div data-bento="1x2" className="feature-item">
-          <FaGem className="text-[#ba9256]" />
-          <p>Crafted with Pure Desi Ghee</p>
+          <FaDroplet className="text-[#ba9256]" />
+          <p>Made in Pure Desi Ghee</p>
         </div>
         <div data-bento="1x3" className="feature-item">
           <FaLeaf className="text-[#ba9256]" />

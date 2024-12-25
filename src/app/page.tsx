@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { FaSpoon } from "react-icons/fa6";
+import { FaSpoon, FaBan, FaSeedling, FaGem, FaLeaf, FaHeart } from "react-icons/fa6";
 import Image from "next/image";
+import BentoGrid from "@bentogrid/core";
 import { Halwa } from "./types";
 
 export default function HalwaPage() {
@@ -63,6 +64,23 @@ export default function HalwaPage() {
     };
   }, [currentHalwaIndex, halwaKeys]);
 
+  useEffect(() => {
+    // Ensure the `bentogrid` element exists before initializing BentoGrid
+    const bentogridElement = document.querySelector(".bentogrid");
+    if (bentogridElement) {
+      new BentoGrid({
+        target: ".bentogrid",
+        columns: 6,
+        cellGap: 50,
+        breakpoints: {
+          1024: { columns: 6, cellGap: 12 }, // Large screens
+          768: { columns: 4, cellGap: 6 },
+          480: { columns: 2, cellGap: 4 },
+        },
+      });
+    }
+  }, [halwaData]); // Ensure it runs after halwaData is fetched and rendered
+
   if (!halwaData || !halwa) return <p className="text-[#ba9256] text-center mt-10">Loading...</p>;
 
   return (
@@ -87,9 +105,8 @@ export default function HalwaPage() {
 
       {/* Navbar */}
       <div
-        className={`sticky top-0 z-10 backdrop-blur-xl bg-black/30 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${
-          isNavbarVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`sticky top-0 z-10 backdrop-blur-xl bg-black/30 text-[#ba9256] px-6 py-4 flex justify-between items-center transition-transform duration-300 ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <h1 className="text-4xl font-anton">thehalwahouse</h1>
         <p className="text-sm font-luloClean">EXOTIC HOMEMADE HALWAS</p>
@@ -145,43 +162,46 @@ export default function HalwaPage() {
             {/* Third Column: Weight, Pricing, and Serves */}
             <div className="flex flex-col items-center justify-center border-2 border-[#ba9256] p-6 rounded-full min-h-[90vh]">
               {halwa.small && (
-                <div className="flex flex-col items-center my-10">
-                  <div className="flex items-center justify-center w-full px-10 gap-4">
+                <div className="flex flex-col items-center my-6">
+                  <div className="flex items-center justify-center gap-4">
                     <p className="font-bold font-luloCleanBold">{halwa.small.weight}</p>
                     <div className="h-6 w-[2px] bg-[#ba9256]" />
                     <p className="font-luloClean">Rs. {halwa.small.price}</p>
                   </div>
-                  <div className="flex items-center justify-center gap-2 my-4">
-                    <FaSpoon className="text-[#ba9256]" />
+                  <div className="flex items-center justify-center gap-2 my-2">
+                    {[...Array(1)].map((_, idx) => (
+                      <FaSpoon key={`small-${idx}`} className="text-[#ba9256]" />
+                    ))}
                     <p className="text-md font-afacad">Serves: {halwa.small.serves}</p>
                   </div>
                 </div>
               )}
               {halwa.medium && (
-                <div className="flex flex-col items-center my-10">
-                  <div className="flex items-center justify-center w-full px-10 gap-4">
+                <div className="flex flex-col items-center my-6">
+                  <div className="flex items-center justify-center gap-4">
                     <p className="font-bold font-luloCleanBold">{halwa.medium.weight}</p>
                     <div className="h-6 w-[2px] bg-[#ba9256]" />
                     <p className="font-luloClean">Rs. {halwa.medium.price}</p>
                   </div>
-                  <div className="flex items-center justify-center gap-2 my-4">
-                    <FaSpoon className="text-[#ba9256]" />
-                    <FaSpoon className="text-[#ba9256]" />
+                  <div className="flex items-center justify-center gap-2 my-2">
+                    {[...Array(2)].map((_, idx) => (
+                      <FaSpoon key={`medium-${idx}`} className="text-[#ba9256]" />
+                    ))}
                     <p className="text-md font-afacad">Serves: {halwa.medium.serves}</p>
                   </div>
                 </div>
               )}
               {halwa.large && (
-                <div className="flex flex-col items-center my-10">
-                  <div className="flex items-center justify-center w-full px-10 gap-4">
+                <div className="flex flex-col items-center my-6">
+                  <div className="flex items-center justify-center gap-4">
                     <p className="font-bold font-luloCleanBold">{halwa.large.weight}</p>
                     <div className="h-6 w-[2px] bg-[#ba9256]" />
                     <p className="font-luloClean">Rs. {halwa.large.price}</p>
                   </div>
-                  <div className="flex items-center justify-center gap-2 my-4">
-                    <FaSpoon className="text-[#ba9256]" />
-                    <FaSpoon className="text-[#ba9256]" />
-                    <FaSpoon className="text-[#ba9256]" />
+                  <div className="flex items-center justify-center gap-2 my-2">
+                    {[...Array(3)].map((_, idx) => (
+                      <FaSpoon key={`large-${idx}`} className="text-[#ba9256]" />
+                    ))}
                     <p className="text-md font-afacad">Serves: {halwa.large.serves}</p>
                   </div>
                 </div>
@@ -192,28 +212,48 @@ export default function HalwaPage() {
       </div>
 
       {/* Bento Grid Section */}
-      <div className="bg-black py-12">
-        <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {halwaKeys.map((key) => (
-            <motion.div
-              key={key}
-              className="relative group overflow-hidden rounded-lg border border-[#ba9256]"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Image
-                src={halwaData![key].path || "/assets/default.jpg"}
-                alt={halwaData![key].name}
-                layout="responsive"
-                width={200}
-                height={200}
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-center text-[#ba9256] font-bold">{halwaData![key].name}</p>
-              </div>
-            </motion.div>
-          ))}
+      <div className="min-h-screen bg-black py-12 flex items-center justify-center">
+        <div className="bentogrid w-full max-w-6xl px-4">
+          <div data-bento="2x2" className="feature-item">
+            <FaSpoon className="text-[#ba9256]" />
+            <p>Freshly Made on Order</p>
+          </div>
+          <div data-bento="1x1" className="feature-item">
+            <FaBan className="text-[#ba9256]" />
+            <p>No Preservatives Added</p>
+          </div>
+          <div data-bento="1x1" className="feature-item">
+            <FaSeedling className="text-[#ba9256]" />
+            <p>Made from Clean and Fresh Ingredients</p>
+          </div>
+          <div data-bento="1x2" className="feature-item">
+            <FaGem className="text-[#ba9256]" />
+            <p>Crafted with Pure Desi Ghee</p>
+          </div>
+          <div data-bento="1x3" className="feature-item">
+            <FaLeaf className="text-[#ba9256]" />
+            <p>Rich in Flavor and Texture</p>
+          </div>
+          <div data-bento="2x1" className="feature-item">
+            <FaHeart className="text-[#ba9256]" />
+            <p>Perfect for Festive Occasions</p>
+          </div>
+          <div data-bento="1x1" className="feature-item">
+            <FaGem className="text-[#ba9256]" />
+            <p>Premium Quality Ingredients</p>
+          </div>
+          <div data-bento="1x1" className="feature-item">
+            <FaHeart className="text-[#ba9256]" />
+            <p>Prepared with Love and Care</p>
+          </div>
+          <div data-bento="1x1" className="feature-item">
+            <FaLeaf className="text-[#ba9256]" />
+            <p>Eco-Friendly Packaging</p>
+          </div>
+          <div data-bento="2x1" className="feature-item">
+            <FaSpoon className="text-[#ba9256]" />
+            <p>Hand-Crafted in Small Batches</p>
+          </div>
         </div>
       </div>
     </div>

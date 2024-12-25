@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { FaSpoon, FaBan, FaSeedling, FaGem, FaLeaf, FaHeart } from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaSpoon, FaBan, FaSeedling, FaGem, FaLeaf, FaHeart, FaGifts } from "react-icons/fa6";
+import { PiCookingPotBold } from "react-icons/pi";
+import { GiPaperBagFolded } from "react-icons/gi";
+
 import Image from "next/image";
 import BentoGrid from "@bentogrid/core";
 import { Halwa } from "./types";
@@ -18,6 +21,12 @@ export default function HalwaPage() {
       const response = await fetch("/data.json");
       const data = await response.json();
       setHalwaData(data);
+
+      // Preload images
+      Object.values(data).forEach((halwa) => {
+        const img = new window.Image();
+        img.src = (halwa as Halwa).path;
+      });
     }
     fetchData();
   }, []);
@@ -45,9 +54,7 @@ export default function HalwaPage() {
       lastScrollY = scrollTop;
 
       // Calculate the height allocated for each halwa
-      const perHalwaHeight = containerHeight / halwaKeys.length;
-
-      // Determine the current halwa index
+      const perHalwaHeight = (containerHeight / halwaKeys.length); // Extend visibility window
       const newIndex = Math.min(
         Math.max(Math.floor((scrollTop - containerTop) / perHalwaHeight), 0),
         halwaKeys.length - 1
@@ -73,26 +80,20 @@ export default function HalwaPage() {
         columns: 6,
         cellGap: 50,
         breakpoints: {
-          1024: { columns: 6, cellGap: 12 }, // Large screens
+          1024: { columns: 6, cellGap: 12 },
           768: { columns: 4, cellGap: 6 },
           480: { columns: 2, cellGap: 4 },
         },
       });
     }
-  }, [halwaData]); // Ensure it runs after halwaData is fetched and rendered
+  }, [halwaData]);
 
   if (!halwaData || !halwa) return <p className="text-[#ba9256] text-center mt-10">Loading...</p>;
 
   return (
     <div className="min-h-screen bg-black text-[#ba9256] relative">
       {/* Custom Scrollbar */}
-      <div
-        className="fixed top-0 right-0 w-[4px] z-10 bg-transparent"
-        style={{
-          height: "100vh",
-          backgroundColor: "transparent",
-        }}
-      >
+      <div className="fixed top-0 right-0 w-[4px] z-10 bg-transparent">
         <motion.div
           className="absolute top-0 w-full"
           style={{
@@ -113,109 +114,137 @@ export default function HalwaPage() {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-screen bg-black">
+      {/* Hero Section */}
+      <div className="relative h-screen bg-black flex flex-col justify-end items-start">
         <div className="absolute top-0 w-full h-[70vh]">
           <Image
-            src={"/assets/hero.JPG"} // Replace with the actual image path
+            src={"/assets/hero.JPG"}
             alt="Hero"
             layout="fill"
             objectFit="cover"
             className="rounded-none"
+            priority
           />
         </div>
+        {/* Animated Text */}
+        <motion.div
+          className="absolute bottom-40 left-10 flex space-x-4"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.5, // Delay between words
+              },
+            },
+          }}
+        >
+          {["HEAT.", "EAT.", "REPEAT."].map((word, index) => (
+            <motion.div
+              key={index}
+              className="text-[#ba9256] text-5xl font-luloCleanBold uppercase"
+              variants={{
+                hidden: { opacity: 0, x: -20 },
+                visible: { opacity: 1, x: 0 },
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              {word}
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
 
+
       {/* Main Section */}
-      <div
-        ref={scrollContainerRef}
-        className="relative"
-        style={{ height: `${halwaKeys.length * 100}vh` }} // Ensure height includes all halwas
-      >
+      <div ref={scrollContainerRef} className="relative" style={{ height: `${halwaKeys.length * 100}vh` }}>
         <div className="sticky top-0 h-screen flex items-center justify-center">
-          <motion.div
-            key={`halwa-${currentHalwaIndex}`}
-            className="container mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* First Column: Name and Description */}
-            <div className="flex items-center justify-center border-2 border-[#ba9256] p-6 rounded-t-full min-h-[90vh]">
-              <div className="text-center">
-                <h2 className="text-xl uppercase font-luloClean">{halwa.name}</h2>
-                <p className="text-lg mt-4 font-afacad">{halwa.description}</p>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`halwa-${currentHalwaIndex}`}
+              className="container mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* First Column: Name and Description */}
+              <div className="flex items-center justify-center border-2 border-[#ba9256] p-6 rounded-t-full min-h-[90vh]">
+                <div className="text-center">
+                  <h2 className="text-xl uppercase font-luloClean">{halwa.name}</h2>
+                  <p className="text-lg mt-4 font-afacad">{halwa.description}</p>
+                </div>
               </div>
-            </div>
 
-            {/* Second Column: Image */}
-            <div className="relative w-full h-full rounded-3xl min-h-[90vh] flex items-center justify-center">
-              <Image
-                src={halwa.path || "assets/Aata.jpg"}
-                alt={halwa.name}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-3xl"
-              />
-            </div>
+              {/* Second Column: Image */}
+              <div className="relative w-full h-full rounded-3xl min-h-[90vh] flex items-center justify-center">
+                <Image
+                  src={halwa.path || "assets/Aata.jpg"}
+                  alt={halwa.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-3xl"
+                  priority
+                />
+              </div>
 
-            {/* Third Column: Weight, Pricing, and Serves */}
-            <div className="flex flex-col items-center justify-center border-2 border-[#ba9256] p-6 rounded-full min-h-[90vh]">
-              {halwa.small && (
-                <div className="flex flex-col items-center my-6">
-                  <div className="flex items-center justify-center gap-4">
-                    <p className="font-bold font-luloCleanBold">{halwa.small.weight}</p>
-                    <div className="h-6 w-[2px] bg-[#ba9256]" />
-                    <p className="font-luloClean">Rs. {halwa.small.price}</p>
+              {/* Third Column: Weight, Pricing, and Serves */}
+              <div className="flex flex-col items-center justify-center border-2 border-[#ba9256] p-6 rounded-full min-h-[90vh]">
+                {halwa.small && (
+                  <div className="flex flex-col items-center my-6">
+                    <div className="flex items-center justify-center gap-4">
+                      <p className="font-bold font-luloCleanBold">{halwa.small.weight}</p>
+                      <div className="h-6 w-[2px] bg-[#ba9256]" />
+                      <p className="font-luloClean">Rs. {halwa.small.price}</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 my-2">
+                      <FaSpoon className="text-[#ba9256]" />
+                      <p className="text-md font-afacad">Serves: {halwa.small.serves}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center gap-2 my-2">
-                    {[...Array(1)].map((_, idx) => (
-                      <FaSpoon key={`small-${idx}`} className="text-[#ba9256]" />
-                    ))}
-                    <p className="text-md font-afacad">Serves: {halwa.small.serves}</p>
+                )}
+                {halwa.medium && (
+                  <div className="flex flex-col items-center my-6">
+                    <div className="flex items-center justify-center gap-4">
+                      <p className="font-bold font-luloCleanBold">{halwa.medium.weight}</p>
+                      <div className="h-6 w-[2px] bg-[#ba9256]" />
+                      <p className="font-luloClean">Rs. {halwa.medium.price}</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 my-2">
+                      <FaSpoon className="text-[#ba9256]" />
+                      <FaSpoon className="text-[#ba9256]" />
+                      <p className="text-md font-afacad">Serves: {halwa.medium.serves}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {halwa.medium && (
-                <div className="flex flex-col items-center my-6">
-                  <div className="flex items-center justify-center gap-4">
-                    <p className="font-bold font-luloCleanBold">{halwa.medium.weight}</p>
-                    <div className="h-6 w-[2px] bg-[#ba9256]" />
-                    <p className="font-luloClean">Rs. {halwa.medium.price}</p>
+                )}
+                {halwa.large && (
+                  <div className="flex flex-col items-center my-6">
+                    <div className="flex items-center justify-center gap-4">
+                      <p className="font-bold font-luloCleanBold">{halwa.large.weight}</p>
+                      <div className="h-6 w-[2px] bg-[#ba9256]" />
+                      <p className="font-luloClean">Rs. {halwa.large.price}</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 my-2">
+                      <FaSpoon className="text-[#ba9256]" />
+                      <FaSpoon className="text-[#ba9256]" />
+                      <FaSpoon className="text-[#ba9256]" />
+                      <p className="text-md font-afacad">Serves: {halwa.large.serves}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center gap-2 my-2">
-                    {[...Array(2)].map((_, idx) => (
-                      <FaSpoon key={`medium-${idx}`} className="text-[#ba9256]" />
-                    ))}
-                    <p className="text-md font-afacad">Serves: {halwa.medium.serves}</p>
-                  </div>
-                </div>
-              )}
-              {halwa.large && (
-                <div className="flex flex-col items-center my-6">
-                  <div className="flex items-center justify-center gap-4">
-                    <p className="font-bold font-luloCleanBold">{halwa.large.weight}</p>
-                    <div className="h-6 w-[2px] bg-[#ba9256]" />
-                    <p className="font-luloClean">Rs. {halwa.large.price}</p>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 my-2">
-                    {[...Array(3)].map((_, idx) => (
-                      <FaSpoon key={`large-${idx}`} className="text-[#ba9256]" />
-                    ))}
-                    <p className="text-md font-afacad">Serves: {halwa.large.serves}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
       {/* Bento Grid Section */}
-      <div className="min-h-screen bg-black py-12 flex items-center justify-center">
+      <div className="min-h-screen bg-black py-12 flex items-center justify-center font-afacad">
         <div className="bentogrid w-full max-w-6xl px-4">
           <div data-bento="2x2" className="feature-item">
-            <FaSpoon className="text-[#ba9256]" />
+            <PiCookingPotBold className="text-[#ba9256]" />
             <p>Freshly Made on Order</p>
           </div>
           <div data-bento="1x1" className="feature-item">
@@ -235,7 +264,7 @@ export default function HalwaPage() {
             <p>Rich in Flavor and Texture</p>
           </div>
           <div data-bento="2x1" className="feature-item">
-            <FaHeart className="text-[#ba9256]" />
+            <FaGifts className="text-[#ba9256]" />
             <p>Perfect for Festive Occasions</p>
           </div>
           <div data-bento="1x1" className="feature-item">
@@ -247,7 +276,7 @@ export default function HalwaPage() {
             <p>Prepared with Love and Care</p>
           </div>
           <div data-bento="1x1" className="feature-item">
-            <FaLeaf className="text-[#ba9256]" />
+            <GiPaperBagFolded className="text-[#ba9256]" />
             <p>Eco-Friendly Packaging</p>
           </div>
           <div data-bento="2x1" className="feature-item">

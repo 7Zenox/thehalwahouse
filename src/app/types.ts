@@ -9,7 +9,7 @@ export type WeightOption = {
     description: string;
     small: WeightOption;
     medium: WeightOption;
-    large: WeightOption;
+    large?: WeightOption;
     path: string;
   }
   

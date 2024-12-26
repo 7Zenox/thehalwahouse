@@ -5,34 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import HalwaMenu from "./components/HalwaMenu";
 import FeaturesGrid from "./components/BentoFeatures";
-import { Halwa } from "./types";
+import data from "./assets/data"; // Import the data directly
+import { Halwa } from "./types"; // Import the Halwa type for clarity
 
 export default function HalwaPage() {
-  const [halwaData, setHalwaData] = useState<Record<string, Halwa> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch("/data.json");
-      const data = await response.json();
-      setHalwaData(data);
+    // Preload images for smoother transitions
+    Object.values(data).forEach((halwa: Halwa) => {
+      const img = new window.Image(); // Use standard browser image preloading
+      img.src = halwa.path;
+    });
 
-      // Preload images
-      (Object.values(data) as Halwa[]).forEach((halwa) => {
-        const img = new window.Image();
-        img.src = halwa.path;
-      });
-
-      // Simulate loading time and fade out loading screen
-      setTimeout(() => setIsLoading(false), 1000);
-    }
-    fetchData();
+    // Simulate loading time to fade out the loading screen
+    setTimeout(() => setIsLoading(false), 1000);
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show navbar as soon as the user starts scrolling
+      // Make the navbar visible after scrolling down
       setIsNavbarVisible(window.scrollY > 50);
     };
 
@@ -59,7 +52,7 @@ export default function HalwaPage() {
                 muted
                 playsInline
               >
-                <source src="/assets/cooking.webm" type="video/webm" />
+                <source src="/cooking.webm" type="video/webm" />
                 Your browser does not support the video tag.
               </video>
               <p className="text-xl font-anton">Cooking...</p>
@@ -90,7 +83,7 @@ export default function HalwaPage() {
             <div className="relative h-screen bg-black">
               <div className="absolute top-0 w-full h-[70vh]">
                 <Image
-                  src={"/assets/hero.JPG"}
+                  src="/hero.jpg" // Optimized image for hero section
                   alt="Hero"
                   layout="fill"
                   objectFit="cover"
@@ -106,9 +99,7 @@ export default function HalwaPage() {
                   hidden: { opacity: 0 },
                   visible: {
                     opacity: 1,
-                    transition: {
-                      staggerChildren: 0.5,
-                    },
+                    transition: { staggerChildren: 0.5 },
                   },
                 }}
               >
@@ -129,7 +120,7 @@ export default function HalwaPage() {
             </div>
 
             {/* Halwa Menu Section */}
-            {halwaData && <HalwaMenu halwaData={halwaData} />}
+            <HalwaMenu halwaData={data} />
 
             {/* Features Grid Section */}
             <FeaturesGrid />

@@ -92,10 +92,10 @@ export default function HalwaMenu({ halwaData }: HalwaMenuProps) {
 
             {/* Third Column: Weight, Pricing, and Serves */}
             <div className="flex flex-col items-center justify-center border-2 border-[#ba9256] p-6 rounded-full min-h-[75vh]">
-              {["small", "medium", "large"].map((size) => {
-                const weightOption = currentHalwa[size as keyof Halwa];
+              {(["small", "medium", "large"] as const).map((size) => {
+                const weightOption = currentHalwa[size];
 
-                if (!weightOption) return null;
+                if (!weightOption || typeof weightOption === "string") return null;
 
                 return (
                   <div key={size} className="flex flex-col items-center my-6">
@@ -120,17 +120,19 @@ export default function HalwaMenu({ halwaData }: HalwaMenuProps) {
 
       {/* Pagination */}
       <div
-        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-xl bg-black/30 px-6 py-4 rounded-full transition-opacity duration-300 flex justify-center space-x-4 ${isPaginationVisible ? "opacity-100" : "opacity-0"
-          }`}
+        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-xl bg-black/30 px-6 py-4 rounded-full transition-opacity duration-300 flex justify-center space-x-4 ${
+          isPaginationVisible ? "opacity-100" : "opacity-0"
+        }`}
       >
         {halwaKeys.map((key, index) => (
           <button
             key={key}
             onClick={() => handlePaginationClick(index)}
-            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${index === currentHalwaIndex
+            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${
+              index === currentHalwaIndex
                 ? "bg-gold text-gray-300 underline-offset-4 underline"
                 : "bg-transparent text-gold hover:text-orange-200"
-              }`}
+            }`}
           >
             {halwaData[key].name}
           </button>

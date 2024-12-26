@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import HalwaMenu from "./components/HalwaMenu";
 import FeaturesGrid from "./components/BentoFeatures";
@@ -9,6 +9,7 @@ import { Halwa } from "./types";
 
 export default function HalwaPage() {
   const [halwaData, setHalwaData] = useState<Record<string, Halwa> | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
   useEffect(() => {
@@ -22,6 +23,9 @@ export default function HalwaPage() {
         const img = new window.Image();
         img.src = halwa.path;
       });
+
+      // Simulate loading time and fade out loading screen
+      setTimeout(() => setIsLoading(false), 1000);
     }
     fetchData();
   }, []);
@@ -29,28 +33,40 @@ export default function HalwaPage() {
   useEffect(() => {
     const handleScroll = () => {
       // Show navbar as soon as the user starts scrolling
-      setIsNavbarVisible(window.scrollY > 300);
+      setIsNavbarVisible(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (!halwaData) return <p className="text-[#ba9256] text-center mt-10">Loading...</p>;
-
   return (
     <div className="min-h-screen bg-black text-[#ba9256] relative">
-      {/* Custom Scrollbar */}
-      <div className="fixed top-0 right-0 w-[4px] z-10 bg-transparent">
-        <motion.div
-          className="absolute top-0 w-full"
-          style={{
-            height: "100%",
-            backgroundColor: "#ba9256",
-          }}
-          transition={{ ease: "linear", duration: 0.2 }}
-        />
-      </div>
+      {/* Loading Screen */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex flex-col items-center space-y-4">
+              <video
+                className="w-32 h-32"
+                autoPlay
+                loop
+                muted
+                playsInline
+              >
+                <source src="/assets/cooking.webm" type="video/webm" />
+                Your browser does not support the video tag.
+              </video>
+              <p className="text-xl font-anton">Cooking...</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Navbar */}
       <div
@@ -62,53 +78,64 @@ export default function HalwaPage() {
         <p className="text-sm font-luloClean">EXOTIC HOMEMADE HALWAS</p>
       </div>
 
-      {/* Hero Section */}
-      <div className="relative h-screen bg-black">
-        <div className="absolute top-0 w-full h-[70vh]">
-          <Image
-            src={"/assets/hero.JPG"}
-            alt="Hero"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-none"
-            priority
-          />
-        </div>
-        <motion.div
-          className="absolute bottom-40 left-10 flex space-x-4"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
-        >
-          {["HEAT.", "EAT.", "REPEAT."].map((word, index) => (
-            <motion.div
-              key={index}
-              className="text-[#ba9256] text-5xl font-luloCleanBold uppercase"
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 },
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              {word}
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+      <AnimatePresence>
+        {!isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Hero Section */}
+            <div className="relative h-screen bg-black">
+              <div className="absolute top-0 w-full h-[70vh]">
+                <Image
+                  src={"/assets/hero.JPG"}
+                  alt="Hero"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-none"
+                  priority
+                />
+              </div>
+              <motion.div
+                className="absolute bottom-40 left-10 flex space-x-4"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.5,
+                    },
+                  },
+                }}
+              >
+                {["HEAT.", "EAT.", "REPEAT."].map((word, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-[#ba9256] text-5xl font-luloCleanBold uppercase"
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: { opacity: 1, x: 0 },
+                    }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {word}
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
 
-      {/* Halwa Menu Section */}
-      <HalwaMenu halwaData={halwaData} />
+            {/* Halwa Menu Section */}
+            {halwaData && <HalwaMenu halwaData={halwaData} />}
 
-      {/* Features Grid Section */}
-      <FeaturesGrid />
+            {/* Features Grid Section */}
+            <FeaturesGrid />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

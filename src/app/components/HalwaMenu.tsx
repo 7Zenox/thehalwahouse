@@ -1,3 +1,4 @@
+// HalwaMenu.tsx
 "use client";
 
 import { useState } from "react";
@@ -94,21 +95,32 @@ export default function HalwaMenu({ halwaData, scrollToMenu }: HalwaMenuProps) {
       </div>
 
       {/* Pagination Buttons */}
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-xl bg-black/30 px-6 py-4 rounded-full flex justify-center space-x-4">
+      <div
+        className="
+    fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10
+    bg-black/30 backdrop-blur-xl
+    flex flex-wrap items-center justify-center
+    w-[90vw] md:w-auto      
+    md:px-6 md:py-4 px-4 py-2
+    md:gap-4 gap-1
+    rounded-full
+    overflow-x-auto        /* Allows horizontal scroll if buttons still overflow */
+  "
+      >
         {halwaKeys.map((key, index) => (
           <button
             key={key}
             onClick={() => handlePaginationClick(index)}
-            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${
-              index === currentHalwaIndex
-                ? "bg-gold text-gray-300 underline-offset-4 underline"
-                : "bg-transparent text-gold hover:text-orange-200"
-            }`}
+            className={`px-3 py-2 rounded-md font-afacad text-md transition-colors ${index === currentHalwaIndex
+              ? "bg-gold text-gray-300 underline-offset-4 underline"
+              : "bg-transparent text-gold hover:text-orange-200"
+              }`}
           >
             {halwaData[key].name}
           </button>
         ))}
       </div>
+
     </div>
   );
 }

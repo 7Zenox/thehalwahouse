@@ -1,3 +1,4 @@
+// page.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -80,34 +81,60 @@ export default function HalwaPage() {
 
       {/* Navbar */}
       <div
-        className={`fixed top-0 left-0 w-full z-10 backdrop-blur-xl bg-black/30 text-[#ba9256]
-          px-6 py-4 flex justify-between items-center transition-transform duration-300
-          ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"}
-        `}
+        className={`
+    fixed top-0 left-0 w-full z-10 backdrop-blur-xl bg-black/30 text-[#ba9256]
+    px-6 py-4 flex justify-between items-center transition-transform duration-300
+    ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"}
+  `}
       >
-        <h1 className="text-4xl font-anton">thehalwahouse</h1>
-        <p className="text-sm font-luloClean">EXOTIC HOMEMADE HALWAS</p>
+        <h1 className="text-2xl font-anton">thehalwahouse</h1>
+        {/* Hide this tagline on mobile */}
+        <p className="text-sm font-luloClean hidden md:block">EXOTIC HOMEMADE HALWAS</p>
+
+        {/* --- MOBILE-ONLY ORDER BUTTON --- */}
+        <a
+          href="https://link.zomato.com/xqzv/rshare?id=9508801230563634"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+      block           /* show on mobile sizes */
+      md:hidden       /* hide on md and larger */
+      font-luloClean
+      text-[0.6rem]
+      transition-colors
+      bg-transparent
+      text-gold
+      hover:text-orange-200
+      px-3 py-2
+      md:px-2 md:py-1
+      border border-[#ba9256]
+      rounded-full
+    "
+        >
+          order here
+        </a>
       </div>
+
 
       {/* Snap-Scroll Container */}
       <div className="snap-y snap-mandatory overflow-y-scroll h-full">
         {/* Hero Section */}
         <section ref={heroRef} className="snap-start h-screen relative bg-black">
-          <div className="absolute top-0 w-full h-[70vh]">
+          {/* Container holds a 70vh image. */}
+          <div className="absolute top-0 left-0 w-full h-[70vh]">
             <Image
               src="/hero.jpg"
               alt="Hero"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-none"
+              fill          /* Next.js 13+ way of making the image fill its parent */
               priority
+              className="object-cover w-full h-full rounded-none"
             />
           </div>
 
           {/* HEAT EAT REPEAT animation only after loading */}
           {!isLoading && (
             <motion.div
-              className="absolute bottom-40 left-10 flex space-x-4"
+              className="absolute bottom-40 md:left-10 left-5 flex flex-wrap gap-x-2 gap-y-2 md:space-x-4"
               initial="hidden"
               animate="visible"
               variants={{
@@ -121,7 +148,7 @@ export default function HalwaPage() {
               {["HEAT.", "EAT.", "REPEAT."].map((word, index) => (
                 <motion.div
                   key={index}
-                  className="text-[#ba9256] text-5xl font-luloCleanBold uppercase"
+                  className="text-[#ba9256] text-3xl md:text-5xl font-luloCleanBold uppercase"
                   variants={{
                     hidden: { opacity: 0, x: -20 },
                     visible: { opacity: 1, x: 0 },
@@ -134,6 +161,7 @@ export default function HalwaPage() {
             </motion.div>
           )}
         </section>
+
 
         {/* Halwa Menu Section */}
         <section ref={menuRef} className="snap-start h-screen">
@@ -154,18 +182,19 @@ export default function HalwaPage() {
         </div>
       )}
 
-      {/* "Order Here" Button */}
+      {/* DESKTOP-ONLY ORDER BUTTON */}
       <div
         className="
-          fixed bottom-4 right-4 z-10
-          px-6 py-4
-          bg-[rgba(0,0,0,0.3)]
-          backdrop-filter
-          backdrop-blur-[10px]
-          border
-          border-[#ba9256]
-          rounded-full
-        "
+    hidden md:block       /* hide on mobile, show on md+ */
+    fixed bottom-4 right-4 z-10
+    px-3 py-2 md:px-6 md:py-4
+    bg-[rgba(0,0,0,0.3)]
+    backdrop-filter
+    backdrop-blur-[10px]
+    border
+    border-[#ba9256]
+    rounded-full
+  "
       >
         <a
           href="https://link.zomato.com/xqzv/rshare?id=9508801230563634"

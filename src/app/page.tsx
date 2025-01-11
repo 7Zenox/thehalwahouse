@@ -1,209 +1,31 @@
-// page.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { useRef } from "react";
+import TextSection from "./components/TextSection";
+import HeroSection from "./components/HeroSection";
 import HalwaMenu from "./components/HalwaMenu";
-import FeaturesGrid from "./components/BentoFeatures";
-import data from "./assets/data";
-import { Halwa } from "./types";
 
-export default function HalwaPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
-  const [isPaginationVisible, setIsPaginationVisible] = useState(false);
-
-  // Refs to track the hero and menu sections
-  const heroRef = useRef<HTMLElement>(null);
-  const menuRef = useRef<HTMLElement>(null);
-
-  // Define scrollToMenu here
-  const scrollToMenu = () => {
-    menuRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  /* Preload images & simulate loading */
-  useEffect(() => {
-    Object.values(data).forEach((halwa: Halwa) => {
-      const img = new window.Image();
-      img.src = halwa.path;
-    });
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
-
-  // ... IntersectionObservers for Hero & Menu (unchanged) ...
-  useEffect(() => {
-    if (!heroRef.current) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setIsNavbarVisible(false);
-        else setIsNavbarVisible(true);
-      });
-    }, { threshold: 0.7 });
-    observer.observe(heroRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!menuRef.current) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setIsPaginationVisible(true);
-        else setIsPaginationVisible(false);
-      });
-    }, { threshold: 0.7 });
-    observer.observe(menuRef.current);
-    return () => observer.disconnect();
-  }, []);
+export default function Page() {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="relative w-full h-screen bg-black text-[#ba9256]">
-      {/* Loading Screen */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="flex flex-col items-center space-y-4">
-              <video className="w-32 h-32" autoPlay loop muted playsInline>
-                <source src="/cooking.webm" type="video/webm" />
-                Your browser does not support the video tag.
-              </video>
-              <p className="text-xl font-luloCleanBold">Cooking...</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div ref={containerRef} className="relative min-h-screen bg-black text-white">
+      {/* Top-left text */}
+      <TextSection />
 
-      {/* Navbar */}
-      <div
-        className={`
-    fixed top-0 left-0 w-full z-10 backdrop-blur-xl bg-black/30 text-[#ba9256]
-    px-6 py-4 flex justify-between items-center transition-transform duration-300
-    ${isNavbarVisible ? "translate-y-0" : "-translate-y-full"}
-  `}
-      >
-        <h1 className="text-2xl font-anton">thehalwahouse</h1>
-        {/* Hide this tagline on mobile */}
-        <p className="text-sm font-luloClean hidden md:block">EXOTIC HOMEMADE HALWAS</p>
-
-        {/* --- MOBILE-ONLY ORDER BUTTON --- */}
-        <a
-          href="https://link.zomato.com/xqzv/rshare?id=9508801230563634"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="
-      block           /* show on mobile sizes */
-      md:hidden       /* hide on md and larger */
-      font-luloClean
-      text-[0.6rem]
-      transition-colors
-      bg-transparent
-      text-gold
-      hover:text-orange-200
-      px-3 py-2
-      md:px-2 md:py-1
-      border border-[#ba9256]
-      rounded-full
-    "
-        >
-          order here
-        </a>
-      </div>
-
-
-      {/* Snap-Scroll Container */}
-      <div className="snap-y snap-mandatory overflow-y-scroll h-full">
-        {/* Hero Section */}
-        <section ref={heroRef} className="snap-start h-screen relative bg-black">
-          {/* Container holds a 70vh image. */}
-          <div className="absolute top-0 left-0 w-full h-[70vh]">
-            <Image
-              src="/hero.jpg"
-              alt="Hero"
-              fill          /* Next.js 13+ way of making the image fill its parent */
-              priority
-              className="object-cover w-full h-full rounded-none"
-            />
+      {/* Sections */}
+      <div>
+        <HeroSection />
+        <section className="section section-2 h-screen relative">
+          <div className="absolute right-0 w-[85%] h-full bg-black/20 text-white flex items-center justify-center">
+            <h1 className="text-6xl font-bold">Section 2</h1>
           </div>
-
-          {/* HEAT EAT REPEAT animation only after loading */}
-          {!isLoading && (
-            <motion.div
-              className="absolute bottom-40 md:left-10 left-5 flex flex-wrap gap-x-2 gap-y-2 md:space-x-4"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: { staggerChildren: 0.5 },
-                },
-              }}
-            >
-              {["HEAT.", "EAT.", "REPEAT."].map((word, index) => (
-                <motion.div
-                  key={index}
-                  className="text-[#ba9256] text-3xl md:text-5xl font-luloCleanBold uppercase"
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { opacity: 1, x: 0 },
-                  }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {word}
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
         </section>
-
-
-        {/* Halwa Menu Section */}
-        <section ref={menuRef} className="snap-start h-screen">
-          {/* Pass scrollToMenu as a prop so HalwaMenu can call it */}
-          <HalwaMenu halwaData={data} scrollToMenu={scrollToMenu} />
+        <section className="section section-3 h-screen relative">
+          <div className="absolute right-0 w-[85%] h-full bg-black/20 text-white flex items-center justify-center">
+            <h1 className="text-6xl font-bold">Section 3</h1>
+          </div>
         </section>
-
-        {/* Features Section */}
-        <section className="snap-start h-screen">
-          <FeaturesGrid />
-        </section>
-      </div>
-
-      {/* Pagination shown only when menu section is in view */}
-      {isPaginationVisible && (
-        <div className="pagination">
-          {/* Your pagination here */}
-        </div>
-      )}
-
-      {/* DESKTOP-ONLY ORDER BUTTON */}
-      <div
-        className="
-    hidden md:block       /* hide on mobile, show on md+ */
-    fixed bottom-4 right-4 z-10
-    px-3 py-2 md:px-6 md:py-4
-    bg-[rgba(0,0,0,0.3)]
-    backdrop-filter
-    backdrop-blur-[10px]
-    border
-    border-[#ba9256]
-    rounded-full
-  "
-      >
-        <a
-          href="https://link.zomato.com/xqzv/rshare?id=9508801230563634"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-luloCleanBold text-md transition-colors bg-transparent text-gold hover:text-orange-200 px-3 py-2 rounded-md"
-        >
-          order here
-        </a>
       </div>
     </div>
   );

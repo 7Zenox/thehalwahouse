@@ -30,7 +30,7 @@ export default function TextSection() {
         ".phrase-for-days",
         { opacity: 0 },
         { opacity: 1, duration: 0.5 },
-        "-=0.2" // Slight overlap with halwa animation
+        "-=0.2"
       );
 
     // Section 2 - Fade out "for days"
@@ -65,22 +65,31 @@ export default function TextSection() {
   }, []);
 
   return (
-    <div className="fixed top-4 left-4 text-4xl">
-      <div className="relative">
-        <span className="block word-the font-anton text-[#ba9256]">the</span>
-        <span className="absolute top-0 left-full -ml-8 word-art font-anton">art of tradition</span>
-      </div>
-      <div className="relative">
-        <span className="block word-halwa font-anton text-[#ba9256]">halwa</span>
-        <span className="absolute top-0 left-full ml-2 phrase-for-days font-anton">
-          for everyone
-        </span>
-      </div>
-      <div className="relative">
-        <span className="block word-house font-anton text-[#ba9256]">house</span>
-        <span className="absolute top-0 left-full ml-4 phrase-home font-anton">
-          of values, purity & love
-        </span>
+    <div className="fixed top-0 left-0 w-[15%] h-screen bg-black text-white flex flex-col justify-start p-4 border-2">
+      <div className="text-4xl font-bold leading-none">
+        {/* "the" */}
+        <div className="relative">
+          <span className="word-the font-anton text-[#ba9256]">the</span>
+          <span className="absolute top-0 left-12 ml-2 word-art font-anton text-gray-200">
+            art of tradition
+          </span>
+        </div>
+
+        {/* "halwa" */}
+        <div className="relative">
+          <span className="word-halwa font-anton text-[#ba9256]">halwa</span>
+          <span className="absolute top-0 left-24 phrase-for-days font-anton text-gray-200">
+            for everyone
+          </span>
+        </div>
+
+        {/* "house" */}
+        <div className="relative">
+          <span className="word-house font-anton text-[#ba9256]">house</span>
+          <span className="absolute top-0 left-24 phrase-home font-anton text-gray-200">
+            of values, purity & love
+          </span>
+        </div>
       </div>
     </div>
   );

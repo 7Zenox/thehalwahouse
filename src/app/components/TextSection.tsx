@@ -65,7 +65,7 @@ export default function TextSection() {
   }, []);
 
   return (
-    <div className="fixed top-4 left-4 text-4xl font-bold leading-tight">
+    <div className="fixed top-4 left-4 text-4xl">
       <div className="relative">
         <span className="block word-the font-anton text-[#ba9256]">the</span>
         <span className="absolute top-0 left-full -ml-8 word-art font-anton">art of tradition</span>

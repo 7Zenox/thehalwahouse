@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import TextSection from "./components/TextSection";
 import HeroSection from "./components/HeroSection";
-import HalwaMenu from "./components/HalwaMenu";
+import MenuSection from "./components/MenuSection";
 
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,7 +18,7 @@ export default function Page() {
         <HeroSection />
         <section className="section section-2 h-screen relative">
           <div className="absolute right-0 w-[85%] h-full bg-black/20 text-white flex items-center justify-center">
-            <h1 className="text-6xl font-bold">Section 2</h1>
+            <MenuSection />
           </div>
         </section>
         <section className="section section-3 h-screen relative">

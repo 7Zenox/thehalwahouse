@@ -8,24 +8,8 @@ export default {
   ],
   theme: {
     extend: {
-      keyframes: {
-        flyInLeft: {
-          '0%': { transform: 'translateX(-100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        flyIn: {
-          '0%': { transform: 'translateY(100%)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        flyInRight: {
-          '0%': { transform: 'translateX(100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-      },
-      animation: {
-        'fly-in-left': 'flyInLeft 0.5s ease-out',
-        'fly-in': 'flyIn 0.5s ease-out',
-        'fly-in-right': 'flyInRight 0.5s ease-out',
+      boxShadow: {
+        'custom-gold': '0 0 50px 15px rgba(186,146,86,0.5)',
       },
       fontFamily: {
         "afacad": "var(--font-afacad)",

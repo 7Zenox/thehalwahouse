@@ -65,7 +65,7 @@ export default function TextSection() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-[15%] h-screen bg-black text-white flex flex-col justify-start p-4 border-2">
+    <div className="fixed top-0 left-0 w-[15%] h-screen bg-black text-white flex flex-col justify-start p-4">
       <div className="text-4xl font-bold leading-none">
         {/* "the" */}
         <div className="relative">
@@ -87,7 +87,7 @@ export default function TextSection() {
         <div className="relative">
           <span className="word-house font-anton text-[#ba9256]">house</span>
           <span className="absolute top-0 left-24 phrase-home font-anton text-gray-200">
-            of values, purity & love
+            that values purity & love
           </span>
         </div>
       </div>

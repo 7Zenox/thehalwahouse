@@ -11,7 +11,9 @@
   "dependencies": {
     "@bentogrid/core": "^1.1.1",
     "framer-motion": "^12.0.0-alpha.1",
+    "gsap": "^3.12.7",
     "next": "15.0.3",
+    "next-videos": "^1.4.1",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-icons": "^5.4.0"

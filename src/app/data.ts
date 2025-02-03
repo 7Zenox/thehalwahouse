@@ -1,113 +1,93 @@
-import moongDal from './moongdal.webp';
-import suji from './suji.webp';
-import kesar from './kesar.webp';
-import aata from './aata.webp';
-import gajar from './gajar.webp';
-import badam from './badam.webp';
-import oreo from './oreo.webp';
-import dryFruits from './dryfruits.webp';
-import { s } from 'framer-motion/client';
-
+// data.ts
 const data = {
   moong_dal_halwa: {
     name: "Moong Dal",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
-    path: moongDal.src,
+    path: '/videos/Moong.webm',
   },
   suji_halwa: {
     name: "Suji",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Made from suji stirred in fresh ghee.",
-    path: suji.src,
+    path: "/videos/Suji.webm",
   },
   kesar_halwa: {
     name: "Kesar",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Fragrant saffron and ghee blend into this royal indulgence of Suji.",
-    path: kesar.src,
+    path: "/vidoes/kesar.webm",
   },
   aata_halwa: {
     name: "Aata",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Comforting aata halwa soaked in ghee and roasted to perfection.",
-    path: aata.src,
+    path: "/vidoes/aata.webm",
   },
   gajar_halwa: {
     name: "Gajar",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
-    path: gajar.src,
+    path: "/vidoes/gajar.webm",
   },
-  badam_halwa: {
-    name: "Badam",
-    status: "on",
-    small: { weight: "250 gms", price: 350, serves: "2-3" },
-    medium: { weight: "500 gms", price: 650, serves: "4-5" },
-    large: { weight: "1 kg", price: 1200, serves: "6-8" },
-    description: "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
-    path: badam.src,
-  },
+  // badam_halwa: {
+  //   name: "Badam",
+  //   small: { weight: "250 gms", price: 350, serves: "2-3" },
+  //   medium: { weight: "500 gms", price: 650, serves: "4-5" },
+  //   large: { weight: "1 kg", price: 1200, serves: "6-8" },
+  //   description: "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
+  //   path: "/vidoes/badam.webm",
+  // },
   oreo_halwa: {
     name: "Oreo",
-    status: "on",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "A fusion delight with crunchy Oreo bits in a soft, creamy yet flaky base.",
-    path: oreo.src,
+    path: "/vidoes/oreo.webm",
   },
   dry_fruits_mix: {
     name: "Dry Fruits Mix",
-    status: "on",
     small: { weight: "150 gms", price: 300, serves: "7-10 garnishings" },
     medium: { weight: "250 gms", price: 550, serves: "15-20 garnishings" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: dryFruits.src,
+    path: "/vidoes/dryFruits.webm",
   },
   rabri: {
     name: "Rabri",
-    status: "off",
     small: { weight: "250 gms", price: 250, serves: "2-3" },
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: dryFruits.src,
+    path: "/vidoes/rabri.webm",
   },
   elaichi_peda: {
     name: "Elaichi Peda",
-    status: "off",
     medium: { weight: "500 gms", price: 350, serves: "15-20 garnishings" },
     large: { weight: "1 kg", price: 700, serves: "6-8" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: dryFruits.src,
+    path: "/vidoes/peda.webm",
   },
-  kesar_peda: {
-    name: "Kesar Peda",
-    status: "off",
-    medium: { weight: "500 gms", price: 400, serves: "15-20 garnishings" },
-    large: { weight: "1 kg", price: 750, serves: "6-8" },
-    description:
-      "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: dryFruits.src,
-  },
+  // kesar_peda: {
+  //   name: "Kesar Peda",
+  //   medium: { weight: "500 gms", price: 400, serves: "15-20 garnishings" },
+  //   large: { weight: "1 kg", price: 750, serves: "6-8" },
+  //   description:
+  //     "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
+  //   path: dryFruits.src,
+  // },
 };
 
 export default data;

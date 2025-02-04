@@ -47,7 +47,11 @@ export default function HomePage() {
     tl.to(squareChainRef.current, { opacity: 0, duration: 1, ease: "power2.out" })
       .to(aboutRef.current, { opacity: 1, duration: 1, ease: "power2.out" }, "<")
       .to(aboutRef.current, { opacity: 0, duration: 1, ease: "power2.out" })
-      .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 1, duration: 0.5, ease: "power2.out" })
+      // Fade in each word sequentially.
+      .to(heatRef.current, { opacity: 1, duration: 0.5, ease: "power2.out" })
+      .to(eatRef.current, { opacity: 1, duration: 0.5, ease: "power2.out" })
+      .to(repeatRef.current, { opacity: 1, duration: 0.5, ease: "power2.out" })
+      // Once we scroll past the words, fade them out together.
       .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 0, duration: 0.5, ease: "power2.out" });
 
     // --- Halwa Items Animations ---

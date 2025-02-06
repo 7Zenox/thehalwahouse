@@ -11,107 +11,127 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HomePage() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const fixedContainerRef = useRef<HTMLDivElement>(null);
-  const halwaShowcaseRef = useRef<HTMLDivElement>(null);
   const squareChainRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const heatRef = useRef<HTMLSpanElement>(null);
   const eatRef = useRef<HTMLSpanElement>(null);
   const repeatRef = useRef<HTMLSpanElement>(null);
+
   const halwaItemRefs = useRef<HTMLDivElement[]>([]);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
+
   const numHalwa = Object.keys(data).length;
-  const [videoDurations, setVideoDurations] = useState<number[]>([]);
-  const [halwaScrollDistances, setHalwaScrollDistances] = useState<number[]>([]);
-  const [totalScrollDistance, setTotalScrollDistance] = useState<number>(0);
-  const [scrollMultiplier, setScrollMultiplier] = useState<number>(0);
+  const [totalScrollDistance, setTotalScrollDistance] = useState(0);
+
+  const introDuration = 1;
+  const halwaDuration = 2;
 
   useEffect(() => {
-    setScrollMultiplier(window.innerHeight / 5);
-  }, []);
+    // Calculate total scroll distance
+    setTotalScrollDistance(
+      (introDuration + numHalwa * halwaDuration) * window.innerHeight
+    );
+  }, [numHalwa]);
 
-  const handleLoadedMetadata = (index: number, event: React.SyntheticEvent<HTMLVideoElement>) => {
-    const duration = event.currentTarget.duration;
-    setVideoDurations((prev) => {
-      const newDurations = [...prev];
-      newDurations[index] = duration;
-      return newDurations;
+  useEffect(() => {
+    if (!totalScrollDistance) return;
+
+    // Reset videos
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.currentTime = 0;
+        video.pause();
+        video.onloadedmetadata = () => ScrollTrigger.refresh();
+      }
     });
-  };
 
-  useEffect(() => {
-    if (videoDurations.filter((d) => d !== undefined).length !== numHalwa) {
-      const fallbackDuration = 10;
-      const distances = Array(numHalwa).fill(fallbackDuration * scrollMultiplier);
-      setHalwaScrollDistances(distances);
-      const introScroll = window.innerHeight;
-      const total = introScroll + distances.reduce((sum, d) => sum + d, 0);
-      setTotalScrollDistance(total);
-      return;
-    }
-    const distances = videoDurations.map((duration) => duration * scrollMultiplier);
-    setHalwaScrollDistances(distances);
-    const introScroll = window.innerHeight;
-    const total = introScroll + distances.reduce((sum, d) => sum + d, 0);
-    setTotalScrollDistance(total);
-  }, [videoDurations, numHalwa, scrollMultiplier]);
-
-  useEffect(() => {
-    if (totalScrollDistance === 0) return;
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: wrapperRef.current,
         start: "top top",
         end: `+=${totalScrollDistance}`,
         scrub: true,
-        markers: true
-      }
+        pin: false,
+        markers: true,
+      },
     });
-    tl.to(squareChainRef.current, { opacity: 0, duration: 0.5, ease: "power2.out" })
-      .to(aboutRef.current, { opacity: 1, duration: 0.5, ease: "power2.out" }, "<")
-      .to(aboutRef.current, { opacity: 0, duration: 0.5, ease: "power2.out" })
-      .to(heatRef.current, { opacity: 1, duration: 0.25, ease: "power2.out" })
-      .to(eatRef.current, { opacity: 1, duration: 0.25, ease: "power2.out" })
-      .to(repeatRef.current, { opacity: 1, duration: 0.25, ease: "power2.out" })
-      .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 0, duration: 0.25, ease: "power2.out" })
-      .to(halwaShowcaseRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" });
-    halwaScrollDistances.forEach((segmentDistance, index) => {
-      const fadeVideoIn = segmentDistance * 0.2;
-      const fadeTextIn = segmentDistance * 0.1;
-      const textVisible = segmentDistance * 0.4;
-      const fadeTextOut = segmentDistance * 0.1;
-      const fadeVideoOut = segmentDistance * 0.2;
-      tl.to(videoRefs.current[index], { opacity: 1, duration: fadeVideoIn, ease: "power2.out" })
-        .to(halwaItemRefs.current[index], { opacity: 1, duration: fadeTextIn, ease: "power2.out" }, ">")
-        .to(halwaItemRefs.current[index], { opacity: 0, duration: fadeTextOut, ease: "power2.out" }, `+=${textVisible}`)
-        .to(videoRefs.current[index], { opacity: 0, duration: fadeVideoOut, ease: "power2.out" }, `+=${fadeTextOut}`);
-    });
-  }, [totalScrollDistance, halwaScrollDistances]);
 
+    // Intro animations
+    tl.to(squareChainRef.current, { opacity: 0, duration: 0.2, ease: "power2.out" })
+      .to(aboutRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" }, "<")
+      .to(aboutRef.current, { opacity: 0, duration: 0.2, ease: "power2.out" })
+      .to(heatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
+      .to(eatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
+      .to(repeatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
+      .to([heatRef.current, eatRef.current, repeatRef.current], {
+        opacity: 0,
+        duration: 0.1,
+        ease: "power2.out",
+      });
+
+    // Halwa fade in/out
+    Object.entries(data).forEach(([, item], index) => {
+      const startTime = introDuration + index * halwaDuration;
+      tl.to(
+        halwaItemRefs.current[index],
+        { opacity: 1, duration: 0.2, ease: "power2.out" },
+        startTime + 0.25
+      ).to(
+        halwaItemRefs.current[index],
+        { opacity: 0, duration: 0.2, ease: "power2.out" },
+        startTime + 2
+      );
+    });
+  }, [totalScrollDistance]);
+
+  // Per-item ScrollTriggers for video scrubbing
   useEffect(() => {
-    if (totalScrollDistance === 0) return;
-    let cumulativeScroll = window.innerHeight;
-    halwaScrollDistances.forEach((segmentDistance, index) => {
-      const start = cumulativeScroll;
-      const end = cumulativeScroll + segmentDistance;
-      cumulativeScroll = end;
+    if (!totalScrollDistance) return;
+    const vh = window.innerHeight;
+
+    Object.entries(data).forEach(([, item], index) => {
       ScrollTrigger.create({
         trigger: wrapperRef.current,
-        start: `${start}px top`,
-        end: `${end}px top`,
+        start: `${(introDuration + index * halwaDuration) * vh} top`,
+        end: `${(introDuration + index * halwaDuration + halwaDuration) * vh} top`,
         scrub: true,
+        markers: true,
+        onEnter: () => {
+          videoRefs.current[index].style.opacity = "1";
+          videoRefs.current.forEach((v, i) => {
+            if (i !== index) v.style.opacity = "0";
+          });
+        },
+        onEnterBack: () => {
+          videoRefs.current[index].style.opacity = "1";
+          videoRefs.current.forEach((v, i) => {
+            if (i !== index) v.style.opacity = "0";
+          });
+        },
+        onLeave: () => {
+          videoRefs.current[index].style.opacity = "0";
+        },
+        onLeaveBack: () => {
+          videoRefs.current[index].style.opacity = "0";
+        },
         onUpdate: (self) => {
           const video = videoRefs.current[index];
           if (video && video.duration) {
             video.currentTime = video.duration * self.progress;
           }
-        }
+        },
       });
     });
-  }, [totalScrollDistance, halwaScrollDistances]);
+  }, [totalScrollDistance]);
 
   return (
     <div ref={wrapperRef} className="relative">
-      <div ref={fixedContainerRef} className="fixed top-0 left-0 w-screen h-screen bg-black">
+      {/* Fixed full screen container */}
+      <div
+        ref={fixedContainerRef}
+        className="fixed top-0 left-0 w-screen h-screen bg-black"
+      >
+        {/* Intro stuff */}
         <div className="absolute inset-0">
           <div ref={squareChainRef} className="squarechain">
             <SquareChain />
@@ -121,85 +141,173 @@ export default function HomePage() {
             style={{ opacity: 0 }}
             className="absolute inset-0 flex justify-center items-center p-8 text-white text-xl lg:m-56"
           >
-            <p className="font-afacad text-[#ba9256]">
-              We craft homemade halwas that blend tradition with unique flavors,
+            <p className="font-afacad text-[#ba9256] lg:text-5xl text-3xl">
+              We craft homemade halwas that blend tradition with modernization,
               delivering an authentic and delightful experience in every bite.
               Meticulously prepared for quality and taste for you to...
             </p>
           </div>
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white lg:text-8xl gap-4 text-4xl font-luloCleanBold">
-            <span ref={heatRef} style={{ opacity: 0 }} className="text-[#ba9256]">HEAT.</span>
-            <span ref={eatRef} style={{ opacity: 0 }} className="text-[#ba9256]">EAT.</span>
-            <span ref={repeatRef} style={{ opacity: 0 }} className="text-[#ba9256]">REPEAT.</span>
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-white lg:text-9xl gap-4 text-5xl font-luloCleanBold">
+            <span
+              ref={heatRef}
+              style={{ opacity: 0 }}
+              className="text-[#ba9256]"
+            >
+              HEAT.
+            </span>
+            <span
+              ref={eatRef}
+              style={{ opacity: 0 }}
+              className="text-[#ba9256]"
+            >
+              EAT.
+            </span>
+            <span
+              ref={repeatRef}
+              style={{ opacity: 0 }}
+              className="text-[#ba9256]"
+            >
+              REPEAT.
+            </span>
           </div>
         </div>
-        <div
-          ref={halwaShowcaseRef}
-          style={{ opacity: 0 }}
-          className="absolute inset-0 flex"
-        >
-          <div className="w-1/2 relative">
+
+        {/* 
+          Halwa section: 
+          - On desktop, two columns 
+          - On mobile, stack them, 
+            with video behind the text overlay 
+        */}
+        <div className="absolute inset-0 flex flex-col lg:flex-row">
+          {/* LEFT COLUMN (Text on desktop) 
+              On mobile, this becomes an absolute overlay 
+          */}
+          <div
+            className={`
+              // Normal half on desktop:
+              lg:w-1/2 
+              lg:relative
+
+              // On mobile, fill entire screen & overlay
+              w-full
+              absolute
+              inset-0
+              z-10
+
+              // We only want it "absolute" below lg:
+              lg:static
+            `}
+          >
+            {/* Each item absolutely placed (for fade in/out) 
+                inside this half on desktop, 
+                or covering the screen on mobile 
+            */}
             {Object.entries(data).map(([key, item], index) => (
               <div
                 key={key}
                 ref={(el) => {
                   if (el) halwaItemRefs.current[index] = el;
                 }}
-                className="absolute inset-0 flex flex-col justify-center items-start pl-8 opacity-0"
+                className="
+                  absolute 
+                  inset-0 
+                  flex 
+                  flex-col 
+                  justify-start
+                  lg:justify-center
+                  items-start 
+                  p-8 
+                  opacity-0
+                  whitespace-normal 
+                  break-words
+                "
               >
-                <h2 className="text-[#ba9256] font-bold text-4xl lg:text-6xl">
+                <h2 className="text-[#ba9256] mt-4 font-luloCleanBold text-4xl lg:text-6xl">
                   {item.name}
                 </h2>
-                <p className="mt-4 text-xl lg:text-2xl text-white">{item.description}</p>
+                <p className="text-[#ba9256] mt-2 text-xl font-afacad lg:text-2xl">
+                  {item.description}
+                </p>
                 {(item.small || item.medium || item.large) && (
-                  <div className="mt-4">
-                    <h3 className="text-white font-semibold text-xl">Sizes:</h3>
+                  <div className="mt-4 text-xl lg:text-2xl text-[#ba9256] lg:w-full w-1/12 px-48 border-2">
+                    {/* Small */}
                     {item.small && (
-                      <p className="text-white">
-                        Small: {item.small.weight}, Price: {item.small.price}, Serves: {item.small.serves}
-                      </p>
+                      <div className="mb-4">
+                        {/* Row for weight & price */}
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span>{item.small.weight}</span>
+                          <span>₹{item.small.price}</span>
+                        </div>
+                        {/* Serves on next line */}
+                        <p className="text-center font-afacad">
+                          Serves {item.small.serves}
+                        </p>
+                      </div>
                     )}
+
+                    {/* Medium */}
                     {item.medium && (
-                      <p className="text-white">
-                        Medium: {item.medium.weight}, Price: {item.medium.price}, Serves: {item.medium.serves}
-                      </p>
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span>{item.medium.weight}</span>
+                          <span>₹{item.medium.price}</span>
+                        </div>
+                        <p className="text-center font-serif font-afacad">
+                          Serves {item.medium.serves}
+                        </p>
+                      </div>
                     )}
+
+                    {/* Large */}
                     {item.large && (
-                      <p className="text-white">
-                        Large: {item.large.weight}, Price: {item.large.price}, Serves: {item.large.serves}
-                      </p>
+                      <div>
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span>{item.large.weight}</span>
+                          <span>₹{item.large.price}</span>
+                        </div>
+                        <p className="text-center font-afacad">
+                          Serves {item.large.serves}
+                        </p>
+                      </div>
                     )}
                   </div>
+
                 )}
               </div>
             ))}
           </div>
-          <div className="w-1/2 relative">
+
+          {/* RIGHT COLUMN (Video on desktop) 
+              On mobile, this is the first stacked item, 
+              filling screen behind the absolute text
+          */}
+          <div
+            className={`
+              lg:w-1/2 
+              w-full 
+              relative
+            `}
+          >
             {Object.entries(data).map(([key, item], index) => (
               <video
                 key={key}
                 ref={(el) => {
                   if (el) videoRefs.current[index] = el;
                 }}
-                onLoadedMetadata={(e) => handleLoadedMetadata(index, e)}
                 src={item.path}
                 className="absolute inset-0 object-cover opacity-0"
                 style={{ height: "100vh", width: "auto" }}
                 muted
                 playsInline
-                autoPlay
                 preload="auto"
               />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Scroll spacer */}
       <div style={{ height: `${totalScrollDistance}px` }}></div>
-      {totalScrollDistance === 0 && (
-        <div className="fixed top-0 left-0 p-4 text-white">
-          Calculating scroll height...
-        </div>
-      )}
     </div>
   );
 }

@@ -213,44 +213,66 @@ export default function HomePage() {
                   inset-0 
                   flex 
                   flex-col 
-                  justify-center 
+                  justify-start
+                  lg:justify-center
                   items-start 
                   p-8 
                   opacity-0
                   whitespace-normal 
                   break-words
+                  lg:pl-24
                 "
               >
-                <h2 className="text-[#ba9256] font-bold text-4xl lg:text-6xl">
+                <h2 className="text-[#ba9256] mt-4 font-luloCleanBold text-4xl lg:text-6xl">
                   {item.name}
                 </h2>
-                <p className="mt-4 text-xl lg:text-2xl text-white">
+                <p className="text-[#886a3e] mt-2 text-lg font-afacad lg:text-2xl">
                   {item.description}
                 </p>
                 {(item.small || item.medium || item.large) && (
-                  <div className="mt-4">
-                    <h3 className="text-white font-semibold text-xl">
-                      Sizes:
-                    </h3>
+                  <div className="mt-4 text-xl lg:text-2xl text-[#ba9256] w-full lg:pr-72 lg:mt-14">
+                    {/* Small */}
                     {item.small && (
-                      <p className="text-white">
-                        Small: {item.small.weight}, Price: {item.small.price},
-                        Serves: {item.small.serves}
-                      </p>
+                      <div className="mb-4">
+                        {/* Row for weight & price */}
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span>{item.small.weight}</span>
+                          <span className="font-luloClean">₹ {item.small.price}</span>
+                        </div>
+                        {/* Serves on next line */}
+                        <p className="text-left font-afacad text-[#886a3e]">
+                          Serves {item.small.serves}
+                        </p>
+                      </div>
                     )}
+
+                    {/* Medium */}
                     {item.medium && (
-                      <p className="text-white">
-                        Medium: {item.medium.weight}, Price:{" "}
-                        {item.medium.price}, Serves: {item.medium.serves}
-                      </p>
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span>{item.medium.weight}</span>
+                          <span className="font-luloClean">₹ {item.medium.price}</span>
+                        </div>
+                        <p className="text-left font-afacad text-[#886a3e]">
+                          Serves {item.medium.serves}
+                        </p>
+                      </div>
                     )}
+
+                    {/* Large */}
                     {item.large && (
-                      <p className="text-white">
-                        Large: {item.large.weight}, Price: {item.large.price},
-                        Serves: {item.large.serves}
-                      </p>
+                      <div>
+                        <div className="flex justify-between items-center w-full font-luloCleanBold">
+                          <span className="">{item.large.weight}</span>
+                          <span className="font-luloClean">₹ {item.large.price}</span>
+                        </div>
+                        <p className="text-left font-afacad text-[#886a3e]">
+                          Serves {item.large.serves}
+                        </p>
+                      </div>
                     )}
                   </div>
+
                 )}
               </div>
             ))}

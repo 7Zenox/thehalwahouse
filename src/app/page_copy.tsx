@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SquareChain from "./components/SquareChain";
+import Aurora from "./components/Aurora";
 import data from "./data";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,11 +12,15 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HomePage() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const fixedContainerRef = useRef<HTMLDivElement>(null);
+
   const squareChainRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const heatRef = useRef<HTMLSpanElement>(null);
   const eatRef = useRef<HTMLSpanElement>(null);
   const repeatRef = useRef<HTMLSpanElement>(null);
+
+  // This ref holds the Aurora container so we can fade it out with GSAP
+  const auroraRef = useRef<HTMLDivElement>(null);
 
   const halwaItemRefs = useRef<HTMLDivElement[]>([]);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
@@ -45,6 +50,7 @@ export default function HomePage() {
       }
     });
 
+    // Main Timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: wrapperRef.current,
@@ -56,8 +62,12 @@ export default function HomePage() {
       },
     });
 
-    // Intro animations
-    tl.to(squareChainRef.current, { opacity: 0, duration: 0.2, ease: "power2.out" })
+    // Intro Animations
+    tl.to(squareChainRef.current, {
+      opacity: 0,
+      duration: 0.2,
+      ease: "power2.out",
+    })
       .to(aboutRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" }, "<")
       .to(aboutRef.current, { opacity: 0, duration: 0.2, ease: "power2.out" })
       .to(heatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
@@ -67,9 +77,15 @@ export default function HomePage() {
         opacity: 0,
         duration: 0.1,
         ease: "power2.out",
+      })
+      // Finally, fade out Aurora container so it's not behind the menu
+      .to(auroraRef.current, {
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.out",
       });
 
-    // Halwa fade in/out
+    // Halwa items fade in/out
     Object.entries(data).forEach(([, item], index) => {
       const startTime = introDuration + index * halwaDuration;
       tl.to(
@@ -129,10 +145,15 @@ export default function HomePage() {
       {/* Fixed full screen container */}
       <div
         ref={fixedContainerRef}
-        className="fixed top-0 left-0 w-screen h-screen bg-black"
+        className="fixed top-0 left-0 w-screen h-screen bg-black/80"
       >
-        {/* Intro stuff */}
+        {/* Intro + Aurora */}
         <div className="absolute inset-0">
+          {/* Aurora container (fades out after intro) */}
+          <div ref={auroraRef} className="absolute inset-0">
+            <Aurora />
+          </div>
+
           <div ref={squareChainRef} className="squarechain">
             <SquareChain />
           </div>
@@ -172,122 +193,85 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 
-          Halwa section: 
-          - On desktop, two columns 
-          - On mobile, stack them, 
-            with video behind the text overlay 
-        */}
+        {/* Halwa Menu Section */}
         <div className="absolute inset-0 flex flex-col lg:flex-row">
-          {/* LEFT COLUMN (Text on desktop) 
-              On mobile, this becomes an absolute overlay 
-          */}
+          {/* LEFT column: text items */}
           <div
             className={`
-              // Normal half on desktop:
               lg:w-1/2 
-              lg:relative
-
-              // On mobile, fill entire screen & overlay
-              w-full
-              absolute
-              inset-0
-              z-10
-
-              // We only want it "absolute" below lg:
-              lg:static
+              w-full 
+              relative
+              // On mobile, absolutely overlay if desired
+              // but for now keep as is
+              // className="absolute inset-0 z-10 lg:static"
             `}
           >
-            {/* Each item absolutely placed (for fade in/out) 
-                inside this half on desktop, 
-                or covering the screen on mobile 
-            */}
             {Object.entries(data).map(([key, item], index) => (
               <div
                 key={key}
                 ref={(el) => {
                   if (el) halwaItemRefs.current[index] = el;
                 }}
-                className="
-                  absolute 
-                  inset-0 
-                  flex 
-                  flex-col 
-                  justify-start
-                  lg:justify-center
-                  items-start 
-                  p-8 
-                  opacity-0
-                  whitespace-normal 
-                  break-words
-                "
+                className="absolute inset-0 flex flex-col justify-start lg:justify-center items-start p-8 opacity-0 whitespace-normal break-words lg:pl-24"
               >
                 <h2 className="text-[#ba9256] mt-4 font-luloCleanBold text-4xl lg:text-6xl">
                   {item.name}
                 </h2>
-                <p className="text-[#ba9256] mt-2 text-xl font-afacad lg:text-2xl">
+                <p className="text-[#886a3e] mt-2 text-lg font-afacad lg:text-2xl">
                   {item.description}
                 </p>
                 {(item.small || item.medium || item.large) && (
-                  <div className="mt-4 text-xl lg:text-2xl text-[#ba9256] lg:w-full w-1/12 px-48 border-2">
+                  <div className="mt-4 text-xl lg:text-2xl text-[#ba9256] w-full lg:pr-72 lg:mt-14">
                     {/* Small */}
                     {item.small && (
                       <div className="mb-4">
-                        {/* Row for weight & price */}
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.small.weight}</span>
-                          <span>₹{item.small.price}</span>
+                          <span className="font-luloClean">
+                            ₹ {item.small.price}
+                          </span>
                         </div>
-                        {/* Serves on next line */}
-                        <p className="text-center font-afacad">
+                        <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.small.serves}
                         </p>
                       </div>
                     )}
-
                     {/* Medium */}
                     {item.medium && (
                       <div className="mb-4">
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.medium.weight}</span>
-                          <span>₹{item.medium.price}</span>
+                          <span className="font-luloClean">
+                            ₹ {item.medium.price}
+                          </span>
                         </div>
-                        <p className="text-center font-serif font-afacad">
+                        <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.medium.serves}
                         </p>
                       </div>
                     )}
-
                     {/* Large */}
                     {item.large && (
                       <div>
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.large.weight}</span>
-                          <span>₹{item.large.price}</span>
+                          <span className="font-luloClean">
+                            ₹ {item.large.price}
+                          </span>
                         </div>
-                        <p className="text-center font-afacad">
+                        <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.large.serves}
                         </p>
                       </div>
                     )}
                   </div>
-
                 )}
               </div>
             ))}
           </div>
 
-          {/* RIGHT COLUMN (Video on desktop) 
-              On mobile, this is the first stacked item, 
-              filling screen behind the absolute text
-          */}
-          <div
-            className={`
-              lg:w-1/2 
-              w-full 
-              relative
-            `}
-          >
+          {/* RIGHT column: video */}
+          <div className="lg:w-1/2 w-full relative">
             {Object.entries(data).map(([key, item], index) => (
               <video
                 key={key}
@@ -306,7 +290,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Scroll spacer */}
+      {/* Extra scroll space for pinning */}
       <div style={{ height: `${totalScrollDistance}px` }}></div>
     </div>
   );

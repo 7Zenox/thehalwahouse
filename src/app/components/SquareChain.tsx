@@ -8,32 +8,43 @@ const SquareChain = () => {
   const squares = Array.from({ length: 20 });
   const radius = 160;
   const squareSize = 70;
+
   const strokeColor = "#ba9256";
   const strokeWidth = 2;
+
   const squaresRef = useRef<(SVGRectElement | null)[]>([]);
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.to(squaresRef.current, {
-      opacity: 0.25,
-      stagger: 0.07,
-      duration: 0.33,
-      ease: "power2.out",
+
+    squaresRef.current.forEach((sq) => {
+      if (sq) gsap.set(sq, { opacity: 0 });
     });
-    tl.to(
-      textRef.current,
-      {
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      "+=0.0"
-    );
+
+    squaresRef.current.forEach((square, i) => {
+      if (!square) return;
+
+      tl.add(() => {
+        if (i > 0 && squaresRef.current[i - 1]) {
+          gsap.set(squaresRef.current[i - 1], { opacity: 0.25 });
+        }
+
+        gsap.set(square, { opacity: 0.65 });
+      }, `+=0.07`);
+    });
+
+    tl.add(() => {
+      const lastIdx = squaresRef.current.length - 1;
+      const lastSquare = squaresRef.current[lastIdx];
+      if (lastSquare) gsap.set(lastSquare, { opacity: 0.25 });
+    }, "+=0.2");
+
+    tl.to(textRef.current, { opacity: 1, duration: 0.5, ease: "power2.out" }, "+=0.0");
   }, []);
 
   return (
-    <div className="relative w-screen h-screen bg-black flex justify-center items-center">
+    <div className="relative w-screen h-screen bg-black/50 flex justify-center items-center">
       <svg
         width="300"
         height="300"
@@ -58,12 +69,15 @@ const SquareChain = () => {
               fill="none"
               stroke={strokeColor}
               strokeWidth={strokeWidth}
-              transform={`rotate(${angle + 45}, ${x + squareSize / 2}, ${y + squareSize / 2})`}
-              opacity="0"
+              transform={`rotate(${angle + 45}, ${
+                x + squareSize / 2
+              }, ${y + squareSize / 2})`}
+              // No inline opacity needed, we set it via GSAP
             />
           );
         })}
       </svg>
+
       <div
         ref={textRef}
         className="absolute flex flex-col items-center"

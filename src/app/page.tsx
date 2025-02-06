@@ -62,11 +62,11 @@ export default function HomePage() {
       tl.to(
         halwaItemRefs.current[index],
         { opacity: 1, duration: 0.2, ease: "power2.out" },
-        startTime + 0.5
+        startTime + 0.25
       ).to(
         halwaItemRefs.current[index],
         { opacity: 0, duration: 0.2, ease: "power2.out" },
-        startTime + 1.5
+        startTime + 2
       );
     });
   }, [numHalwa, totalScrollDistance]);
@@ -117,11 +117,11 @@ export default function HomePage() {
             <SquareChain />
           </div>
           <div ref={aboutRef} style={{ opacity: 0 }} className="absolute inset-0 flex justify-center items-center p-8 text-white text-xl lg:m-56">
-            <p className="font-afacad text-[#ba9256]">
-              We craft homemade halwas that blend tradition with unique flavors, delivering an authentic and delightful experience in every bite. Meticulously prepared for quality and taste for you to...
+            <p className="font-afacad text-[#ba9256] lg:text-5xl text-3xl">
+              We craft homemade halwas that blend tradition with modernization, delivering an authentic and delightful experience in every bite. Meticulously prepared for quality and taste for you to...
             </p>
           </div>
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white lg:text-8xl gap-4 text-4xl font-luloCleanBold">
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-white lg:text-9xl gap-4 text-5xl font-luloCleanBold">
             <span ref={heatRef} style={{ opacity: 0 }} className="text-[#ba9256]">HEAT.</span>
             <span ref={eatRef} style={{ opacity: 0 }} className="text-[#ba9256]">EAT.</span>
             <span ref={repeatRef} style={{ opacity: 0 }} className="text-[#ba9256]">REPEAT.</span>

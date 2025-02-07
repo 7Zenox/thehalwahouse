@@ -279,25 +279,23 @@ export default function HomePage() {
           <div className="lg:w-1/2 w-full relative">
             {Object.entries(data).map(([key, item], index) => (
               <video
-                key={key}
+                key={key} // Ensures React doesn't re-render the video unnecessarily
                 ref={(el) => {
-                  if (el) videoRefs.current[index] = el;
+                  if (el && !videoRefs.current[index]) {
+                    videoRefs.current[index] = el; // Ensures only one reference is stored
+                  }
                 }}
                 className="absolute inset-0 object-cover opacity-0"
                 style={{ height: "100vh", width: "auto" }}
                 muted
                 playsInline
-                preload="auto"
-                controls
+                preload="auto" // This ensures it loads only when needed
               >
-                {/* MOV Source for Safari & iOS */}
+                {/* MOV for Safari & iOS */}
                 <source src={item.path.replace('.mp4', '.mov')} type="video/quicktime" />
 
                 {/* MP4 Fallback for Other Browsers */}
                 <source src={item.path} type="video/mp4" />
-
-                {/* Optional Message for Unsupported Browsers */}
-                Your browser does not support the video tag.
               </video>
             ))}
           </div>

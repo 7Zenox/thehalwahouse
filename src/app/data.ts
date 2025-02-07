@@ -33,7 +33,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Comforting aata halwa soaked in ghee and roasted to perfection.",
-    path: "/videos_mp4/aata_fixed.mp4",
+    path: "/videos_mp4/aata_fixed.m3u8",
   },
   gajar_halwa: {
     name: "Gajar",

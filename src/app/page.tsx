@@ -283,13 +283,22 @@ export default function HomePage() {
                 ref={(el) => {
                   if (el) videoRefs.current[index] = el;
                 }}
-                src={item.path}
                 className="absolute inset-0 object-cover opacity-0"
                 style={{ height: "100vh", width: "auto" }}
                 muted
                 playsInline
                 preload="auto"
-              />
+                controls
+              >
+                {/* MOV Source for Safari & iOS */}
+                <source src={item.path.replace('.mp4', '.mov')} type="video/quicktime" />
+
+                {/* MP4 Fallback for Other Browsers */}
+                <source src={item.path} type="video/mp4" />
+
+                {/* Optional Message for Unsupported Browsers */}
+                Your browser does not support the video tag.
+              </video>
             ))}
           </div>
         </div>

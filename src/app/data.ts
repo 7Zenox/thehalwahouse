@@ -9,7 +9,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
-    path: '/videos_mov/moong.mov',
+    path: '/videos_mov/moong_web.mov',
   },
   suji_halwa: {
     name: "Suji",

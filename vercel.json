@@ -1,9 +1,9 @@
 {
     "headers": [
       {
-        "source": "/videos_mp4/:video",
+        "source": "/videos_mov/:video",
         "headers": [
-          { "key": "Content-Type", "value": "video/mp4" },
+          { "key": "Content-Type", "value": "video/mov" },
           { "key": "Accept-Ranges", "value": "bytes" },
           { "key": "Access-Control-Allow-Origin", "value": "*" },
           { "key": "Access-Control-Allow-Methods", "value": "GET, HEAD, OPTIONS" },

@@ -61,7 +61,9 @@ const SquareChain = () => {
           return (
             <rect
               key={i}
-              ref={(el) => (squaresRef.current[i] = el)}
+              ref={(el) => {
+              squaresRef.current[i] = el;
+              }}
               x={x}
               y={y}
               width={squareSize}

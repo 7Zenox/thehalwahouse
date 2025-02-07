@@ -1,5 +1,8 @@
 // data.ts
-const data = {
+
+import { HalwaItem } from "./types";
+
+const data: Record<string, HalwaItem> = {
   moong_dal_halwa: {
     name: "Moong Dal",
     small: { weight: "250 gms", price: 250, serves: "2-3" },

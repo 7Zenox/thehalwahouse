@@ -3,13 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SquareChain from "./components/SquareChain";
+import dynamic from "next/dynamic";
+
 import Aurora from "./components/Aurora";
 import data from "./data";
+
+const SquareChainNoSSR = dynamic(() => import("./components/SquareChain"), {
+  ssr: false,
+});
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HomePage() {
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const fixedContainerRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +64,6 @@ export default function HomePage() {
         end: `+=${totalScrollDistance}`,
         scrub: true,
         pin: false,
-        markers: true,
       },
     });
 
@@ -86,7 +91,8 @@ export default function HomePage() {
       });
 
     // Halwa items fade in/out
-    Object.entries(data).forEach(([, item], index) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
       tl.to(
         halwaItemRefs.current[index],
@@ -104,14 +110,13 @@ export default function HomePage() {
   useEffect(() => {
     if (!totalScrollDistance) return;
     const vh = window.innerHeight;
-
-    Object.entries(data).forEach(([, item], index) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(data).forEach(([, _], index) => {
       ScrollTrigger.create({
         trigger: wrapperRef.current,
         start: `${(introDuration + index * halwaDuration) * vh} top`,
         end: `${(introDuration + index * halwaDuration + halwaDuration) * vh} top`,
         scrub: true,
-        markers: true,
         onEnter: () => {
           videoRefs.current[index].style.opacity = "1";
           videoRefs.current.forEach((v, i) => {
@@ -155,7 +160,7 @@ export default function HomePage() {
           </div>
 
           <div ref={squareChainRef} className="squarechain">
-            <SquareChain />
+            <SquareChainNoSSR />
           </div>
           <div
             ref={aboutRef}
@@ -292,6 +297,37 @@ export default function HomePage() {
 
       {/* Extra scroll space for pinning */}
       <div style={{ height: `${totalScrollDistance}px` }}></div>
+
+      {/* Order here button */}
+      <button
+        onClick={() =>
+          window.open(
+            "https://link.zomato.com/xqzv/rshare?id=9508801230563634",
+            "_blank"
+          )
+        }
+        className="
+    fixed
+    lg:bottom-8
+    lg:right-8
+    bottom-5
+    right-5
+    px-5
+    py-3
+    rounded-full
+    font-luloCleanBold
+    border
+    border-[#ba9256]
+    text-[#ba9256]
+    lg:text-lg
+    text-xs
+    backdrop-blur-3xl
+    hover:bg-white/10
+  "
+      >
+        ORDER NOW
+      </button>
+
     </div>
   );
 }

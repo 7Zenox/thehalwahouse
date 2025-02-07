@@ -1,15 +1,15 @@
-export type WeightOption = {
-    weight: string;
-    price: number;
-    serves: string;
-  };
-  
-  export interface Halwa {
-    name: string;
-    description: string;
-    small: WeightOption;
-    medium: WeightOption;
-    large?: WeightOption;
-    path: string;
-  }
-  
+// types.ts
+export interface HalwaSize {
+  weight: string;
+  price: number;
+  serves: string;
+}
+
+export interface HalwaItem {
+  name: string;
+  description: string;
+  path: string;
+  small?: HalwaSize;
+  medium?: HalwaSize;
+  large?: HalwaSize;
+}

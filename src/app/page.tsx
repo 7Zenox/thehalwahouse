@@ -66,6 +66,7 @@ export default function HomePage() {
       .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 0, duration: 0.1 })
       .to(auroraRef.current, { opacity: 0, duration: 0.4 });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
       tl.to(halwaItemRefs.current[index], { opacity: 1, duration: 0.2 }, startTime + 0.25)
@@ -76,7 +77,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!totalScrollDistance) return;
     const vh = window.innerHeight;
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       ScrollTrigger.create({
         trigger: wrapperRef.current,

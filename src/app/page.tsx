@@ -87,9 +87,17 @@ export default function HomePage() {
           const video = videoRefs.current[index];
           if (video) {
             video.style.opacity = "1";
-            video.play().catch(() => console.warn("Autoplay blocked"));
+            // Start the video briefly to prime it, then pause immediately.
+            video
+              .play()
+              .then(() => {
+                video.pause();
+              })
+              .catch((err) => {
+                console.warn("Autoplay blocked:", err);
+              });
           }
-        },
+        },        
         onUpdate: (self) => {
           const video = videoRefs.current[index];
           if (video && video.readyState >= 3) {

@@ -27,16 +27,46 @@ export default function HomePage() {
   const videoRefs = useRef<HTMLVideoElement[]>([]);
   const numHalwa = Object.keys(data).length;
   const [totalScrollDistance, setTotalScrollDistance] = useState(0);
-  
+
+  // durations in arbitrary units (e.g., seconds)
   const introDuration = 1;
   const halwaDuration = 2;
+  const totalDuration = introDuration + numHalwa * halwaDuration;
 
+  // Set the total scroll distance.
   useEffect(() => {
-    setTotalScrollDistance(
-      (introDuration + numHalwa * halwaDuration) * window.innerHeight
-    );
-  }, [numHalwa]);
+    setTotalScrollDistance(totalDuration * window.innerHeight);
+  }, [numHalwa, totalDuration]);
 
+  // Unlock videos on mobile via a user gesture.
+  useEffect(() => {
+    const unlockVideos = () => {
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          // Try to play then immediately pause the video to unlock it.
+          video
+            .play()
+            .then(() => {
+              video.pause();
+            })
+            .catch((err) => {
+              console.warn("Video unlock error:", err);
+            });
+        }
+      });
+    };
+
+    // Listen for a user gesture (touch or click) once.
+    document.addEventListener("touchstart", unlockVideos, { once: true });
+    document.addEventListener("click", unlockVideos, { once: true });
+
+    return () => {
+      document.removeEventListener("touchstart", unlockVideos);
+      document.removeEventListener("click", unlockVideos);
+    };
+  }, []);
+
+  // Initialize videos and the main GSAP timeline for text/overlays.
   useEffect(() => {
     if (!totalScrollDistance) return;
 
@@ -63,50 +93,60 @@ export default function HomePage() {
       .to(heatRef.current, { opacity: 1, duration: 0.1 })
       .to(eatRef.current, { opacity: 1, duration: 0.1 })
       .to(repeatRef.current, { opacity: 1, duration: 0.1 })
-      .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 0, duration: 0.1 })
+      .to(
+        [heatRef.current, eatRef.current, repeatRef.current],
+        { opacity: 0, duration: 0.1 }
+      )
       .to(auroraRef.current, { opacity: 0, duration: 0.4 });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
-      tl.to(halwaItemRefs.current[index], { opacity: 1, duration: 0.2 }, startTime + 0.25)
-        .to(halwaItemRefs.current[index], { opacity: 0, duration: 0.2 }, startTime + 2);
+      tl.to(
+        halwaItemRefs.current[index],
+        { opacity: 1, duration: 0.2 },
+        startTime + 0.25
+      ).to(
+        halwaItemRefs.current[index],
+        { opacity: 0, duration: 0.2 },
+        startTime + halwaDuration
+      );
     });
   }, [totalScrollDistance]);
 
+  // Global ScrollTrigger to drive video scrubbing.
   useEffect(() => {
     if (!totalScrollDistance) return;
-    const vh = window.innerHeight;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Object.entries(data).forEach(([, _], index) => {
-      ScrollTrigger.create({
-        trigger: wrapperRef.current,
-        start: `${(introDuration + index * halwaDuration) * vh} top`,
-        end: `${(introDuration + index * halwaDuration + halwaDuration) * vh} top`,
-        scrub: true,
-        onEnter: () => {
+
+    ScrollTrigger.create({
+      trigger: wrapperRef.current,
+      start: "top top",
+      end: `+=${totalScrollDistance}`,
+      scrub: true,
+      onUpdate: (self) => {
+        const globalProgress = self.progress; // from 0 to 1
+
+        // Map the global progress into each video's segment.
+        Object.entries(data).forEach(([, _], index) => {
+          const segmentStart =
+            (introDuration + index * halwaDuration) / totalDuration;
+          const segmentEnd =
+            (introDuration + (index + 1) * halwaDuration) / totalDuration;
           const video = videoRefs.current[index];
-          if (video) {
-            video.style.opacity = "1";
-            video
-              .play()
-              .then(() => {
-                video.pause();
-              })
-              .catch((err) => {
-                console.warn("Autoplay blocked:", err);
-              });
+
+          if (video && video.readyState >= 2) {
+            if (globalProgress >= segmentStart && globalProgress <= segmentEnd) {
+              const localProgress =
+                (globalProgress - segmentStart) / (segmentEnd - segmentStart);
+              video.style.opacity = "1";
+              video.currentTime = video.duration * localProgress;
+            } else {
+              video.style.opacity = "0";
+            }
           }
-        },        
-        onUpdate: (self) => {
-          const video = videoRefs.current[index];
-          if (video && video.readyState >= 3) {
-            video.currentTime = video.duration * self.progress;
-          }
-        },
-      });
+        });
+      },
     });
-  }, [totalScrollDistance]);
+  }, [totalScrollDistance, totalDuration]);
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -117,11 +157,9 @@ export default function HomePage() {
       >
         {/* Intro + Aurora */}
         <div className="absolute inset-0">
-          {/* Aurora container (fades out after intro) */}
           <div ref={auroraRef} className="absolute inset-0">
             <Aurora />
           </div>
-
           <div ref={squareChainRef} className="squarechain">
             <SquareChainNoSSR />
           </div>
@@ -137,25 +175,13 @@ export default function HomePage() {
             </p>
           </div>
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white lg:text-9xl gap-4 text-5xl font-luloCleanBold">
-            <span
-              ref={heatRef}
-              style={{ opacity: 0 }}
-              className="text-[#ba9256]"
-            >
+            <span ref={heatRef} style={{ opacity: 0 }} className="text-[#ba9256]">
               HEAT.
             </span>
-            <span
-              ref={eatRef}
-              style={{ opacity: 0 }}
-              className="text-[#ba9256]"
-            >
+            <span ref={eatRef} style={{ opacity: 0 }} className="text-[#ba9256]">
               EAT.
             </span>
-            <span
-              ref={repeatRef}
-              style={{ opacity: 0 }}
-              className="text-[#ba9256]"
-            >
+            <span ref={repeatRef} style={{ opacity: 0 }} className="text-[#ba9256]">
               REPEAT.
             </span>
           </div>
@@ -164,16 +190,7 @@ export default function HomePage() {
         {/* Halwa Menu Section */}
         <div className="absolute inset-0 flex flex-col lg:flex-row">
           {/* LEFT column: text items */}
-          <div
-            className={
-              `lg:w-1/2 
-              w-full 
-              relative
-              // On mobile, absolutely overlay if desired
-              // but for now keep as is
-              // className="absolute inset-0 z-10 lg:static"`
-            }
-          >
+          <div className="lg:w-1/2 w-full relative">
             {Object.entries(data).map(([key, item], index) => (
               <div
                 key={key}
@@ -190,42 +207,33 @@ export default function HomePage() {
                 </p>
                 {(item.small || item.medium || item.large) && (
                   <div className="mt-4 text-xl lg:text-2xl text-[#ba9256] w-full lg:pr-72 lg:mt-14">
-                    {/* Small */}
                     {item.small && (
                       <div className="mb-4">
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.small.weight}</span>
-                          <span className="font-luloClean">
-                            ₹ {item.small.price}
-                          </span>
+                          <span className="font-luloClean">₹ {item.small.price}</span>
                         </div>
                         <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.small.serves}
                         </p>
                       </div>
                     )}
-                    {/* Medium */}
                     {item.medium && (
                       <div className="mb-4">
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.medium.weight}</span>
-                          <span className="font-luloClean">
-                            ₹ {item.medium.price}
-                          </span>
+                          <span className="font-luloClean">₹ {item.medium.price}</span>
                         </div>
                         <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.medium.serves}
                         </p>
                       </div>
                     )}
-                    {/* Large */}
                     {item.large && (
                       <div>
                         <div className="flex justify-between items-center w-full font-luloCleanBold">
                           <span>{item.large.weight}</span>
-                          <span className="font-luloClean">
-                            ₹ {item.large.price}
-                          </span>
+                          <span className="font-luloClean">₹ {item.large.price}</span>
                         </div>
                         <p className="text-left font-afacad text-[#886a3e]">
                           Serves {item.large.serves}
@@ -245,7 +253,7 @@ export default function HomePage() {
                 key={key}
                 ref={(el) => {
                   if (el && !videoRefs.current[index]) {
-                    videoRefs.current[index] = el; // Ensures only one reference
+                    videoRefs.current[index] = el;
                   }
                 }}
                 className="absolute inset-0 object-cover opacity-0 -z-50"
@@ -274,28 +282,10 @@ export default function HomePage() {
             "_blank"
           )
         }
-        className="
-    fixed
-    lg:bottom-8
-    lg:right-8
-    bottom-5
-    right-5
-    px-5
-    py-3
-    rounded-full
-    font-luloCleanBold
-    border
-    border-[#ba9256]
-    text-[#ba9256]
-    lg:text-lg
-    text-xs
-    backdrop-blur-3xl
-    hover:bg-white/10
-  "
+        className="fixed lg:bottom-8 lg:right-8 bottom-5 right-5 px-5 py-3 rounded-full font-luloCleanBold border border-[#ba9256] text-[#ba9256] lg:text-lg text-xs backdrop-blur-3xl hover:bg-white/10"
       >
         ORDER NOW
       </button>
-
     </div>
   );
 }

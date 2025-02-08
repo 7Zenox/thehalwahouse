@@ -179,6 +179,7 @@ export default function HomePage() {
       .to(auroraRef.current, { opacity: 0, duration: 0.4 });
 
     // Animate halwa text items.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
       tl.to(
@@ -211,6 +212,7 @@ export default function HomePage() {
           const halwaProgress = globalProgress * (newTotalDuration / totalDuration);
 
           // For each video, calculate its segment boundaries.
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           Object.entries(data).forEach(([, _], index) => {
             const segmentStart =
               (introDuration + index * halwaDuration) / totalDuration;
@@ -231,6 +233,7 @@ export default function HomePage() {
           });
         } else {
           // After the halwa section, hide all videos.
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           Object.entries(data).forEach(([, _], index) => {
             const video = videoRefs.current[index];
             if (video) {

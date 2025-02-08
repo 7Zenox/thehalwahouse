@@ -87,7 +87,6 @@ export default function HomePage() {
           const video = videoRefs.current[index];
           if (video) {
             video.style.opacity = "1";
-            // Start the video briefly to prime it, then pause immediately.
             video
               .play()
               .then(() => {
@@ -248,7 +247,7 @@ export default function HomePage() {
                     videoRefs.current[index] = el; // Ensures only one reference
                   }
                 }}
-                className="absolute inset-0 object-cover opacity-0"
+                className="absolute inset-0 object-cover opacity-0 -z-50"
                 style={{ height: "100vh", width: "auto" }}
                 muted
                 playsInline

@@ -99,6 +99,7 @@ export default function HomePage() {
       )
       .to(auroraRef.current, { opacity: 0, duration: 0.4 });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
       tl.to(
@@ -126,6 +127,7 @@ export default function HomePage() {
         const globalProgress = self.progress; // from 0 to 1
 
         // Map the global progress into each video's segment.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Object.entries(data).forEach(([, _], index) => {
           const segmentStart =
             (introDuration + index * halwaDuration) / totalDuration;

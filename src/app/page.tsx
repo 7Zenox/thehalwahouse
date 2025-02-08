@@ -15,30 +15,23 @@ const SquareChainNoSSR = dynamic(() => import("./components/SquareChain"), {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HomePage() {
-
   const wrapperRef = useRef<HTMLDivElement>(null);
   const fixedContainerRef = useRef<HTMLDivElement>(null);
-
   const squareChainRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const heatRef = useRef<HTMLSpanElement>(null);
   const eatRef = useRef<HTMLSpanElement>(null);
   const repeatRef = useRef<HTMLSpanElement>(null);
-
-  // This ref holds the Aurora container so we can fade it out with GSAP
   const auroraRef = useRef<HTMLDivElement>(null);
-
   const halwaItemRefs = useRef<HTMLDivElement[]>([]);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
-
   const numHalwa = Object.keys(data).length;
   const [totalScrollDistance, setTotalScrollDistance] = useState(0);
-
+  
   const introDuration = 1;
   const halwaDuration = 2;
 
   useEffect(() => {
-    // Calculate total scroll distance
     setTotalScrollDistance(
       (introDuration + numHalwa * halwaDuration) * window.innerHeight
     );
@@ -47,7 +40,6 @@ export default function HomePage() {
   useEffect(() => {
     if (!totalScrollDistance) return;
 
-    // Reset videos
     videoRefs.current.forEach((video) => {
       if (video) {
         video.currentTime = 0;
@@ -56,61 +48,35 @@ export default function HomePage() {
       }
     });
 
-    // Main Timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: wrapperRef.current,
         start: "top top",
         end: `+=${totalScrollDistance}`,
         scrub: true,
-        pin: false,
       },
     });
 
-    // Intro Animations
-    tl.to(squareChainRef.current, {
-      opacity: 0,
-      duration: 0.2,
-      ease: "power2.out",
-    })
-      .to(aboutRef.current, { opacity: 1, duration: 0.2, ease: "power2.out" }, "<")
-      .to(aboutRef.current, { opacity: 0, duration: 0.2, ease: "power2.out" })
-      .to(heatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
-      .to(eatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
-      .to(repeatRef.current, { opacity: 1, duration: 0.1, ease: "power2.out" })
-      .to([heatRef.current, eatRef.current, repeatRef.current], {
-        opacity: 0,
-        duration: 0.1,
-        ease: "power2.out",
-      })
-      // Finally, fade out Aurora container so it's not behind the menu
-      .to(auroraRef.current, {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.out",
-      });
+    tl.to(squareChainRef.current, { opacity: 0, duration: 0.2 })
+      .to(aboutRef.current, { opacity: 1, duration: 0.2 }, "<")
+      .to(aboutRef.current, { opacity: 0, duration: 0.2 })
+      .to(heatRef.current, { opacity: 1, duration: 0.1 })
+      .to(eatRef.current, { opacity: 1, duration: 0.1 })
+      .to(repeatRef.current, { opacity: 1, duration: 0.1 })
+      .to([heatRef.current, eatRef.current, repeatRef.current], { opacity: 0, duration: 0.1 })
+      .to(auroraRef.current, { opacity: 0, duration: 0.4 });
 
-    // Halwa items fade in/out
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(data).forEach(([, _], index) => {
       const startTime = introDuration + index * halwaDuration;
-      tl.to(
-        halwaItemRefs.current[index],
-        { opacity: 1, duration: 0.2, ease: "power2.out" },
-        startTime + 0.25
-      ).to(
-        halwaItemRefs.current[index],
-        { opacity: 0, duration: 0.2, ease: "power2.out" },
-        startTime + 2
-      );
+      tl.to(halwaItemRefs.current[index], { opacity: 1, duration: 0.2 }, startTime + 0.25)
+        .to(halwaItemRefs.current[index], { opacity: 0, duration: 0.2 }, startTime + 2);
     });
   }, [totalScrollDistance]);
 
-  // Per-item ScrollTriggers for video scrubbing
   useEffect(() => {
     if (!totalScrollDistance) return;
     const vh = window.innerHeight;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     Object.entries(data).forEach(([, _], index) => {
       ScrollTrigger.create({
         trigger: wrapperRef.current,
@@ -118,26 +84,15 @@ export default function HomePage() {
         end: `${(introDuration + index * halwaDuration + halwaDuration) * vh} top`,
         scrub: true,
         onEnter: () => {
-          videoRefs.current[index].style.opacity = "1";
-          videoRefs.current.forEach((v, i) => {
-            if (i !== index) v.style.opacity = "0";
-          });
-        },
-        onEnterBack: () => {
-          videoRefs.current[index].style.opacity = "1";
-          videoRefs.current.forEach((v, i) => {
-            if (i !== index) v.style.opacity = "0";
-          });
-        },
-        onLeave: () => {
-          videoRefs.current[index].style.opacity = "0";
-        },
-        onLeaveBack: () => {
-          videoRefs.current[index].style.opacity = "0";
+          const video = videoRefs.current[index];
+          if (video) {
+            video.style.opacity = "1";
+            video.play().catch(() => console.warn("Autoplay blocked"));
+          }
         },
         onUpdate: (self) => {
           const video = videoRefs.current[index];
-          if (video && video.duration) {
+          if (video && video.readyState >= 3) {
             video.currentTime = video.duration * self.progress;
           }
         },
@@ -202,14 +157,14 @@ export default function HomePage() {
         <div className="absolute inset-0 flex flex-col lg:flex-row">
           {/* LEFT column: text items */}
           <div
-            className={`
-              lg:w-1/2 
+            className={
+              `lg:w-1/2 
               w-full 
               relative
               // On mobile, absolutely overlay if desired
               // but for now keep as is
-              // className="absolute inset-0 z-10 lg:static"
-            `}
+              // className="absolute inset-0 z-10 lg:static"`
+            }
           >
             {Object.entries(data).map(([key, item], index) => (
               <div
@@ -279,22 +234,20 @@ export default function HomePage() {
           <div className="lg:w-1/2 w-full relative">
             {Object.entries(data).map(([key, item], index) => (
               <video
-                key={key} // Ensures React doesn't re-render the video unnecessarily
+                key={key}
                 ref={(el) => {
                   if (el && !videoRefs.current[index]) {
-                    videoRefs.current[index] = el; // Ensures only one reference is stored
+                    videoRefs.current[index] = el; // Ensures only one reference
                   }
                 }}
                 className="absolute inset-0 object-cover opacity-0"
                 style={{ height: "100vh", width: "auto" }}
                 muted
                 playsInline
-                preload="auto" // This ensures it loads only when needed
+                preload="auto"
+                disablePictureInPicture
+                controlsList="nodownload noplaybackrate nofullscreen"
               >
-                {/* MOV for Safari & iOS */}
-                <source src={item.path.replace('.mp4', '.mov')} type="video/quicktime" />
-
-                {/* MP4 Fallback for Other Browsers */}
                 <source src={item.path} type="video/mp4" />
               </video>
             ))}

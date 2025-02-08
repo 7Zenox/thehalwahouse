@@ -9,7 +9,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "A rich, velvety treat of slow-cooked moong dal and fresh ghee.",
-    path: '/videos_mov/moong_web.mov',
+    path: '/videos_mp4/moong.mp4',
   },
   suji_halwa: {
     name: "Suji",
@@ -17,7 +17,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Made from suji stirred in fresh ghee.",
-    path: "/videos_mov/suji.mov",
+    path: "/videos_mp4/suji.mp4",
   },
   kesar_halwa: {
     name: "Kesar",
@@ -25,7 +25,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Fragrant saffron and ghee blend into this royal indulgence of Suji.",
-    path: "/videos_mov/kesar.mov",
+    path: "/videos_mp4/kesar.mp4",
   },
   aata_halwa: {
     name: "Aata",
@@ -33,7 +33,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "Comforting aata halwa soaked in ghee and roasted to perfection.",
-    path: "/videos_mov/aata.mov",
+    path: "/videos_mp4/aata.mp4",
   },
   gajar_halwa: {
     name: "Gajar",
@@ -41,7 +41,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "The royal indulgence of red carrots slow-cooked in ghee and milk, garnished with nuts.",
-    path: "/videos_mov/gajar.mov",
+    path: "/videos_mp4/gajar.mp4",
   },
   // badam_halwa: {
   //   name: "Badam",
@@ -49,7 +49,7 @@ const data: Record<string, HalwaItem> = {
   //   medium: { weight: "500 gms", price: 650, serves: "4-5" },
   //   large: { weight: "1 kg", price: 1200, serves: "6-8" },
   //   description: "Luxuriously smooth with rich blanched almonds and aromatic ghee.",
-  //   path: "/videos_mov/badam.mov",
+  //   path: "/videos_mp4/badam.mp4",
   // },
   oreo_halwa: {
     name: "Oreo",
@@ -57,7 +57,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     large: { weight: "1 kg", price: 800, serves: "6-8" },
     description: "A fusion delight with crunchy Oreo bits in a soft, creamy yet flaky base.",
-    path: "/videos_mov/oreo.mov",
+    path: "/videos_mp4/oreo.mp4",
   },
   dry_fruits_mix: {
     name: "Dry Fruits Mix",
@@ -65,7 +65,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "250 gms", price: 550, serves: "15-20 garnishings" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: "/videos_mov/dryfruitsmix.mov",
+    path: "/videos_mp4/dryfruitsmix.mp4",
   },
   rabri: {
     name: "Rabri",
@@ -73,7 +73,7 @@ const data: Record<string, HalwaItem> = {
     medium: { weight: "500 gms", price: 450, serves: "4-5" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: "/videos_mov/rabri.mov",
+    path: "/videos_mp4/rabri.mp4",
   },
   elaichi_peda: {
     name: "Elaichi Peda",
@@ -81,7 +81,7 @@ const data: Record<string, HalwaItem> = {
     large: { weight: "1 kg", price: 700, serves: "8 or more" },
     description:
       "A crunchy blend of premium nuts, shredded to perfection for a burst of flavor. Perfect for toppings, post meal munchies and garnishing.",
-    path: "/videos_mov/peda.mov",
+    path: "/videos_mp4/peda.mp4",
   },
   // kesar_peda: {
   //   name: "Kesar Peda",
